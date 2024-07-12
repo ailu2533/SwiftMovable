@@ -9,16 +9,14 @@ import Foundation
 
 import SwiftUI
 
-enum nodePosition {
-    case TopLeft, TopRight,
-
-         BottomLeft, BottomRight
+enum NodePosition {
+    case topLeft, topRight, bottomLeft, bottomRight
 }
 
 struct DraggableNode: View {
     @Binding var width: CGFloat
     @Binding var height: CGFloat
-    let nodeType: nodePosition
+    let nodeType: NodePosition
     let aspectRatio: CGFloat
 
     var body: some View {
@@ -40,16 +38,16 @@ struct DraggableNode: View {
                         var newHeight = height
 
                         switch nodeType {
-                        case .TopLeft:
+                        case .topLeft:
                             newWidth = width - value.translation.width
                             newHeight = newWidth / aspectRatio
-                        case .TopRight:
+                        case .topRight:
                             newWidth = width + value.translation.width
                             newHeight = newWidth / aspectRatio
-                        case .BottomLeft:
+                        case .bottomLeft:
                             newHeight = height + value.translation.height
                             newWidth = newHeight * aspectRatio
-                        case .BottomRight:
+                        case .bottomRight:
                             newHeight = height + value.translation.height
                             newWidth = newHeight * aspectRatio
                         }
@@ -84,7 +82,7 @@ struct DraggableModifier: ViewModifier {
                 aspectRatio = size.width / size.height
             })
             .overlay(alignment: .bottomTrailing) {
-                DraggableNode(width: $width, height: $height, nodeType: .BottomRight, aspectRatio: aspectRatio)
+                DraggableNode(width: $width, height: $height, nodeType: .bottomRight, aspectRatio: aspectRatio)
             }
     }
 }

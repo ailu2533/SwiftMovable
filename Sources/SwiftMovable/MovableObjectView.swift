@@ -126,7 +126,7 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
                                 state = calculateRotation(value: value)
                             })
                             .onEnded({ value in
-                                item.rotationDegree = item.rotationDegree + calculateRotation(value: value).degrees
+                                item.rotationDegree += calculateRotation(value: value).degrees
                             })
                     )
             }

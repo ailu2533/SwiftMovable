@@ -214,10 +214,10 @@ public struct MovableObjectView2<Item: MovableObject, Content: View>: View {
     private var dragGesture: some Gesture {
         DragGesture()
             .onChanged({ value in
-                let x = value.location.x
-                let y = value.location.y
+                let locationX = value.location.x
+                let locationY = value.location.y
                 if let parentSize = config.parentSize {
-                    if x < 0 || y < 0 || x > parentSize.width || y > parentSize.height {
+                    if locationX < 0 || locationY < 0 || locationX > parentSize.width || locationY > parentSize.height {
                         return
                     }
                 }
