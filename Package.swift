@@ -23,7 +23,6 @@ let package = Package(
             name: "SwiftMovable",
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
 
-
         ),
         .testTarget(
             name: "SwiftMovableTests",

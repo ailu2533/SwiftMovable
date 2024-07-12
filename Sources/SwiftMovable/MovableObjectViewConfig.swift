@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public struct MovableObjectViewConfig {
     public var parentSize: CGSize?
     public var enable: Bool

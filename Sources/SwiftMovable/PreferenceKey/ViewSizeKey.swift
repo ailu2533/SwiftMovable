@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 public struct ViewSizeKey: PreferenceKey {
     public typealias Value = Anchor<CGPoint>?
     public static var defaultValue: Value = nil
@@ -17,4 +16,3 @@ public struct ViewSizeKey: PreferenceKey {
         value = nextValue()
     }
 }
-

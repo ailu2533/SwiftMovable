@@ -71,8 +71,6 @@ public final class TextItem: MovableObject, Hashable {
     }
 }
 
-
-
 extension TextItem {
     public func deepCopy() -> TextItem {
         let copy = TextItem(text: text, pos: pos, rotationDegree: rotationDegree)

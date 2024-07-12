@@ -51,8 +51,7 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     }
 
     func updateRotation(value: DragGesture.Value) -> Angle {
-        let rotation = calculateRotation(value: value)
-        return rotation
+        return calculateRotation(value: value)
     }
 
     // MARK: - UI Components
