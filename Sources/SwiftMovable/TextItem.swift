@@ -71,16 +71,7 @@ public final class TextItem: MovableObject, Hashable {
     }
 }
 
-#Preview("2") {
-    RoundedRectangle(cornerRadius: 8)
-        .fill(.blue.opacity(0.3))
-        .frame(height: 400)
-        .overlay {
-            MovableObjectView(textItem: TextItem(text: "hello world"), selected: true) { item in
-                Text(item.text)
-            }
-        }
-}
+
 
 extension TextItem {
     public func deepCopy() -> TextItem {

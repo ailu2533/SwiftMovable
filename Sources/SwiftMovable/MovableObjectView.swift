@@ -8,6 +8,8 @@
 import SwiftUI
 
 public struct MovableObjectView<Item: MovableObject, Content: View>: View {
+    // MARK: - Properties
+
     @Bindable var item: Item
     @Binding var selection: UUID?
     private var config: MovableObjectViewConfig
@@ -16,22 +18,19 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     @State private var viewSize: CGSize = .zero
     @State private var lastFeedbackAngle: Double = 0
     @State private var currentAngle: Angle = .zero
-    let offset: CGFloat = 20
-
     @State private var isDragging = false
-    private let id = UUID()
-
     @State private var lastRotationUpdateTime: Date = Date()
-
     @State private var rotationDegrees = 0.0
 
-    var selected: Bool {
-        selection == item.id
-    }
+    private let id = UUID()
+    let offset: CGFloat = 20
+    let snapThreshold: Double = 2
+    let smallRotationThreshold: Double = 5
 
-    var showControl: Bool {
-        return selected && config.enable
-    }
+    var selected: Bool { selection == item.id }
+    var showControl: Bool { selected && config.enable }
+
+    // MARK: - Initializer
 
     public init(item: Item, selection: Binding<UUID?>, config: MovableObjectViewConfig, content: @escaping (Item) -> Content) {
         self.item = item
@@ -40,66 +39,43 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
         _selection = selection
     }
 
+    // MARK: - Rotation Methods
+
     public func calculateRotation(value: DragGesture.Value) -> Angle {
         let centerX = viewSize.width / 2
         let centerY = viewSize.height / 2
         let startVector = CGVector(dx: value.startLocation.x - centerX, dy: value.startLocation.y - centerY)
         let endVector = CGVector(dx: value.location.x - centerX, dy: value.location.y - centerY)
         let angleDifference = atan2(endVector.dy, endVector.dx) - atan2(startVector.dy, startVector.dx)
-        let rotation = Angle(radians: Double(angleDifference))
-
-        return rotation
+        return Angle(radians: Double(angleDifference))
     }
-
-    let snapThreshold: Double = 2 // 吸附阈值，单位为度
-    let smallRotationThreshold: Double = 5 // 小角度旋转阈值，单位为度
 
     func updateRotation(value: DragGesture.Value) -> Angle {
-        // 本次旋转角度
         let rotation = calculateRotation(value: value)
-
-        // 原来旋转角度
-        let originRotation = item.rotationDegree + currentAngle.degrees
-
-        // 新旋转角度
-        let newRotation = item.rotationDegree + rotation.degrees
-
-//        let v = value.velocity.width * value.velocity.width + value.velocity.height * value.velocity.height
-//        print("v: \(v)")
-
-//        if v < 200 && abs(originRotation - 0) <= snapThreshold
-//            && abs(newRotation - 0) > snapThreshold
-//            && abs(rotation.degrees) <= smallRotationThreshold {
-//            return .zero
-//        }
-
-        // 不接近 0 度，使用实际旋转角度
         return rotation
     }
 
+    // MARK: - UI Components
+
     var editButton: some View {
-        Button(action: {
-            config.editCallback(item)
-        }, label: {
+        Button(action: { config.editCallback(item) }) {
             Image(systemName: "pencil.tip")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 12, height: 12)
-        })
+        }
         .offset(x: offset, y: -offset)
         .opacity(showControl ? 1 : 0)
         .buttonStyle(CircleButtonStyle2())
     }
 
     var deleteButton: some View {
-        Button(role: .destructive, action: {
-            config.deleteCallback(item)
-        }, label: {
+        Button(role: .destructive, action: { config.deleteCallback(item) }) {
             Image(systemName: "xmark")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 12, height: 12)
-        })
+        }
         .offset(x: -offset, y: -offset)
         .opacity(showControl ? 1 : 0)
         .buttonStyle(CircleButtonStyle2())
@@ -108,22 +84,15 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     var rotationHandler: some View {
         let dragGesture = DragGesture(coordinateSpace: .named(id))
             .onChanged { value in
-
                 let now = Date()
                 let timeInterval = now.timeIntervalSince(lastRotationUpdateTime)
-                guard timeInterval > 0.016 else {
-                    return
-                }
+                guard timeInterval > 0.016 else { return }
 
                 lastRotationUpdateTime = now
-
                 currentAngle = updateRotation(value: value)
-
-                // 当前旋转角度
                 rotationDegrees = item.rotationDegree + currentAngle.degrees
             }
             .onEnded { _ in
-                // 直接使用最终旋转角度，不进行吸附
                 item.rotationDegree += currentAngle.degrees
                 currentAngle = .zero
 
@@ -150,29 +119,23 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     }
 
     var topCorner: some View {
-        return Rectangle()
+        Rectangle()
             .stroke(Color.cyan, style: StrokeStyle(lineWidth: 1.5))
             .opacity(showControl ? 1 : 0)
-            .readSize(callback: {
-                viewSize = $0
-            })
-            .overlay(alignment: .topTrailing) {
-                editButton
-            }
-            .overlay(alignment: .topLeading) {
-                deleteButton
-            }
-            .if(showControl, transform: { view in
+            .readSize(callback: { viewSize = $0 })
+            .overlay(alignment: .topTrailing) { editButton }
+            .overlay(alignment: .topLeading) { deleteButton }
+            .if(showControl) { view in
                 view.modifier(DraggableModifier(width: $item.width, height: $item.height, hasBorder: false))
-            })
-            .background(alignment: .bottom) {
-                rotationHandler
             }
+            .background(alignment: .bottom) { rotationHandler }
     }
+
+    // MARK: - Gestures
 
     private var dragGesture: some Gesture {
         DragGesture()
-            .onChanged({ value in
+            .onChanged { value in
                 let locationX = value.location.x
                 let locationY = value.location.y
                 if let parentSize = config.parentSize {
@@ -181,24 +144,24 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
                     }
                 }
                 print(value.location)
-
                 item.onDragChanged(translation: value.translation)
-            }).onEnded({ _ in
+            }
+            .onEnded { _ in
                 item.onDragEnd()
-            })
+            }
     }
+
+    // MARK: - Body
 
     public var body: some View {
         content(item)
-            .if(item.width > 0 && item.height > 0, transform: { view in
+            .if(item.width > 0 && item.height > 0) { view in
                 view.frame(width: item.width, height: item.height)
-            })
+            }
             .padding(4)
             .anchorPreference(key: ViewSizeKey.self, value: .center, transform: { $0 })
             .contentShape(Rectangle())
-            .overlay {
-                topCorner
-            }
+            .overlay { topCorner }
             .rotationEffect(currentAngle + Angle(degrees: item.rotationDegree))
             .coordinateSpace(name: id)
             .position(x: item.pos.x, y: item.pos.y)
