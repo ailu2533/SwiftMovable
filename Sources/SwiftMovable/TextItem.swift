@@ -27,7 +27,7 @@ public final class TextItem: MovableObject, Hashable {
         case fontName
         case fontSize
     }
-    
+
 //    static func == (lhs: TextItem, rhs: TextItem) -> Bool {
 //        return lhs.id == rhs.id && lhs.pos == rhs.pos && lhs.rotationDegree == rhs.rotationDegree && lhs.zIndex == rhs.zIndex && lhs.scale == rhs.scale
 //    }

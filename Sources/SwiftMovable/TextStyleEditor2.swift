@@ -1,7 +1,6 @@
-
 import SwiftUI
 
-//struct TextStyleEditor5: View {
+// struct TextStyleEditor5: View {
 //    @Binding var textItem: Stylable?
 //    @Binding var selectedFontName: String?
 //    @Binding var fontSize: CGFloat
@@ -55,4 +54,4 @@ import SwiftUI
 //            Circle().fill(Color(hex: color) ?? Color.clear).frame(width: 24)
 //        }
 //    }
-//}
+// }

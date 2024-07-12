@@ -40,7 +40,7 @@ extension CustomFont {
 //            .init(displayName: "霞鹜文楷", postscriptName: "LXGWWenKai-Regular"),
 //            .init(displayName: "寒蝉圆黑体", postscriptName: "ChillRoundGothic_Heavy"),
             .init(displayName: "寒蝉全黑体bold", postscriptName: "ChillRoundFBold"),
-            .init(displayName: "寒蝉全黑体regular", postscriptName: "ChillRoundFRegular"),
+            .init(displayName: "寒蝉全黑体regular", postscriptName: "ChillRoundFRegular")
 //            .init(displayName: "寒蝉活仿宋", postscriptName: "ChillHuoFangSong_Regular"),
 //            .init(displayName: "寒蝉活仿宋Bold", postscriptName: "ChillHuoFangSong-ConBold"),
         ]
