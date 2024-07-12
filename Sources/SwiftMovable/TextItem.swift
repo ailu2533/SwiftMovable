@@ -28,10 +28,6 @@ public final class TextItem: MovableObject, Hashable {
         case fontSize
     }
 
-//    static func == (lhs: TextItem, rhs: TextItem) -> Bool {
-//        return lhs.id == rhs.id && lhs.pos == rhs.pos && lhs.rotationDegree == rhs.rotationDegree && lhs.zIndex == rhs.zIndex && lhs.scale == rhs.scale
-//    }
-
     public init(text: String, pos: CGPoint = .zero, colorHex: String = "#FFFFFF", fontName: String? = nil, fontSize: CGFloat = 20, rotationDegree: CGFloat = .zero) {
         self.text = text
         if let fontName {

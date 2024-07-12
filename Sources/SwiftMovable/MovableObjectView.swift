@@ -7,53 +7,38 @@
 
 import SwiftUI
 
-public struct CircleButtonStyle2: ButtonStyle {
-    @Environment(\.isEnabled) var isEnabled
-
-    public init() {
-    }
-
-    public func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-            .padding(5)
-//            .foregroundStyle(configuration.role == .destructive ? .red : .white)
-            .clipShape(Circle())
-//            .shadow(radius: 1)
-            .saturation(isEnabled ? 1 : 0)
-            .opacity(configuration.isPressed ? 0.5 : 1)
-            .frame(width: 30, height: 30)
-            .contentShape(Rectangle())
-    }
-}
-
 public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     @Bindable var item: Item
-
-    private var content: (Item) -> Content
-    private var selected: Bool
-    private var deleteCallback: (Item) -> Void
-    private var editCallback: (Item) -> Void
+    @Binding var selection: UUID?
+    private var config: MovableObjectViewConfig
+    var content: (Item) -> Content
 
     @State private var viewSize: CGSize = .zero
-    @GestureState private var angle: Angle = .zero
+    @State private var lastFeedbackAngle: Double = 0
+    @State private var currentAngle: Angle = .zero
+    let offset: CGFloat = 20
 
-    public init(textItem: Item, selected: Bool, deleteCallback: @escaping (Item) -> Void, editCallback: @escaping (Item) -> Void, content: @escaping (Item) -> Content) {
-        item = textItem
-        self.selected = selected
-        self.deleteCallback = deleteCallback
-        self.editCallback = editCallback
-        self.content = content
-    }
-
-    public init(textItem: Item, selected: Bool, content: @escaping (Item) -> Content) {
-        item = textItem
-        self.selected = selected
-        deleteCallback = { _ in }
-        editCallback = { _ in }
-        self.content = content
-    }
-
+    @State private var isDragging = false
     private let id = UUID()
+
+    @State private var lastRotationUpdateTime: Date = Date()
+
+    @State private var rotationDegrees = 0.0
+
+    var selected: Bool {
+        selection == item.id
+    }
+
+    var showControl: Bool {
+        return selected && config.enable
+    }
+
+    public init(item: Item, selection: Binding<UUID?>, config: MovableObjectViewConfig, content: @escaping (Item) -> Content) {
+        self.item = item
+        self.config = config
+        self.content = content
+        _selection = selection
+    }
 
     public func calculateRotation(value: DragGesture.Value) -> Angle {
         let centerX = viewSize.width / 2
@@ -66,90 +51,169 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
         return rotation
     }
 
+    let snapThreshold: Double = 2 // 吸附阈值，单位为度
+    let smallRotationThreshold: Double = 5 // 小角度旋转阈值，单位为度
+
+    func updateRotation(value: DragGesture.Value) -> Angle {
+        // 本次旋转角度
+        let rotation = calculateRotation(value: value)
+
+        // 原来旋转角度
+        let originRotation = item.rotationDegree + currentAngle.degrees
+
+        // 新旋转角度
+        let newRotation = item.rotationDegree + rotation.degrees
+
+//        let v = value.velocity.width * value.velocity.width + value.velocity.height * value.velocity.height
+//        print("v: \(v)")
+
+//        if v < 200 && abs(originRotation - 0) <= snapThreshold
+//            && abs(newRotation - 0) > snapThreshold
+//            && abs(rotation.degrees) <= smallRotationThreshold {
+//            return .zero
+//        }
+
+        // 不接近 0 度，使用实际旋转角度
+        return rotation
+    }
+
+    var editButton: some View {
+        Button(action: {
+            config.editCallback(item)
+        }, label: {
+            Image(systemName: "pencil.tip")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 12, height: 12)
+        })
+        .offset(x: offset, y: -offset)
+        .opacity(showControl ? 1 : 0)
+        .buttonStyle(CircleButtonStyle2())
+    }
+
+    var deleteButton: some View {
+        Button(role: .destructive, action: {
+            config.deleteCallback(item)
+        }, label: {
+            Image(systemName: "xmark")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 12, height: 12)
+        })
+        .offset(x: -offset, y: -offset)
+        .opacity(showControl ? 1 : 0)
+        .buttonStyle(CircleButtonStyle2())
+    }
+
+    var rotationHandler: some View {
+        let dragGesture = DragGesture(coordinateSpace: .named(id))
+            .onChanged { value in
+
+                let now = Date()
+                let timeInterval = now.timeIntervalSince(lastRotationUpdateTime)
+                guard timeInterval > 0.016 else {
+                    return
+                }
+
+                lastRotationUpdateTime = now
+
+                currentAngle = updateRotation(value: value)
+
+                // 当前旋转角度
+                rotationDegrees = item.rotationDegree + currentAngle.degrees
+            }
+            .onEnded { _ in
+                // 直接使用最终旋转角度，不进行吸附
+                item.rotationDegree += currentAngle.degrees
+                currentAngle = .zero
+
+                if abs(item.rotationDegree - 0) <= snapThreshold {
+                    item.rotationDegree = .zero
+                }
+            }
+
+        return Image(systemName: "arrow.triangle.2.circlepath")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 12, height: 12)
+            .padding(5)
+            .background(isDragging ? Color.orange : Color.white)
+            .clipShape(Circle())
+            .shadow(radius: 1)
+            .frame(width: 50, height: 50)
+            .contentShape(Rectangle())
+            .opacity(showControl ? 1 : 0)
+            .offset(y: 2 * offset)
+            .if(config.enable) { view in
+                view.gesture(dragGesture)
+            }
+    }
+
     var topCorner: some View {
         return Rectangle()
-            .stroke(style: StrokeStyle(lineWidth: 2, dash: [4]))
-            .shadow(color: Color(.black), radius: 0.1)
-            .foregroundStyle(Color(.systemBackground))
-            .shadow(radius: 10)
-            .opacity(selected ? 1 : 0)
+            .stroke(Color.cyan, style: StrokeStyle(lineWidth: 1.5))
+            .opacity(showControl ? 1 : 0)
             .readSize(callback: {
                 viewSize = $0
             })
-
-            .overlay(alignment: .center) {
-                Button(action: {
-                    editCallback(item)
-                }, label: {
-                    Image(systemName: "pencil.tip")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 12, height: 12)
-                })
-                .offset(x: viewSize.width / 2 + 10, y: -viewSize.height / 2 - 10)
-                .opacity(selected ? 1 : 0)
-                .buttonStyle(CircleButtonStyle2())
+            .overlay(alignment: .topTrailing) {
+                editButton
             }
-            .overlay(alignment: .center) {
-                Button(role: .destructive, action: {
-                    deleteCallback(item)
-                }, label: {
-                    Image(systemName: "xmark")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 12, height: 12)
-                })
-                .offset(x: -viewSize.width / 2 - 10, y: -viewSize.height / 2 - 10)
-
-                .opacity(selected ? 1 : 0)
-                .buttonStyle(CircleButtonStyle2())
+            .overlay(alignment: .topLeading) {
+                deleteButton
             }
-
-            .background(alignment: .center) {
-                Image(systemName: "arrow.triangle.2.circlepath")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 12, height: 12)
-                    .padding(5)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .shadow(radius: 1)
-
-                    .opacity(selected ? 1 : 0)
-
-                    .offset(x: viewSize.width / 2 + 10, y: viewSize.height / 2 + 10)
-
-                    .gesture(
-                        DragGesture(coordinateSpace: .named(id))
-                            .updating($angle, body: { value, state, _ in
-//                                print(value.location)
-                                state = calculateRotation(value: value)
-                            })
-                            .onEnded({ value in
-                                item.rotationDegree += calculateRotation(value: value).degrees
-                            })
-                    )
+            .if(showControl, transform: { view in
+                view.modifier(DraggableModifier(width: $item.width, height: $item.height, hasBorder: false))
+            })
+            .background(alignment: .bottom) {
+                rotationHandler
             }
+    }
+
+    private var dragGesture: some Gesture {
+        DragGesture()
+            .onChanged({ value in
+                let locationX = value.location.x
+                let locationY = value.location.y
+                if let parentSize = config.parentSize {
+                    if locationX < 0 || locationY < 0 || locationX > parentSize.width || locationY > parentSize.height {
+                        return
+                    }
+                }
+                print(value.location)
+
+                item.onDragChanged(translation: value.translation)
+            }).onEnded({ _ in
+                item.onDragEnd()
+            })
     }
 
     public var body: some View {
         content(item)
-            .padding(.vertical, 8)
-            .padding(.horizontal, 16)
-            .background {
+            .if(item.width > 0 && item.height > 0, transform: { view in
+                view.frame(width: item.width, height: item.height)
+            })
+            .padding(4)
+            .anchorPreference(key: ViewSizeKey.self, value: .center, transform: { $0 })
+            .contentShape(Rectangle())
+            .overlay {
                 topCorner
             }
-            .rotationEffect(angle + Angle(degrees: item.rotationDegree))
+            .rotationEffect(currentAngle + Angle(degrees: item.rotationDegree))
             .coordinateSpace(name: id)
             .position(x: item.pos.x, y: item.pos.y)
             .offset(x: item.offset.x, y: item.offset.y)
-            .gesture(DragGesture()
-                .onChanged({ value in
-                    item.onDragChanged(translation: value.translation)
-                }).onEnded({ _ in
-                    item.onDragEnd()
-                })
-            )
+            .if(config.enable && selection == item.id) { view in
+                view.gesture(dragGesture)
+            }
+            .onTapGesture {
+                config.tapCallback(item)
+                selection = item.id
+            }
+            .zIndex(selection == item.id ? 1 : 0)
+            .sensoryFeedback(.impact(flexibility: .solid, intensity: 0.6), trigger: rotationDegrees) { oldValue, newValue in
+                abs(oldValue) >= snapThreshold && abs(newValue) < snapThreshold
+            }
     }
 }
 
@@ -158,20 +222,22 @@ class MovableImage: MovableObject {
 }
 
 #Preview("3") {
-    VStack {
-        RoundedRectangle(cornerRadius: 8)
-            .fill(.blue.opacity(0.2))
-            .frame(height: 400)
-            .overlay {
-                MovableObjectView(textItem: MovableImage(pos: .init(x: 100, y: 100)), selected: true) { item in
-                    Image(systemName: item.imageName)
-                }
-            }
+    MovablePreview()
+}
 
-        MovableObjectView(textItem: MovableImage(pos: .init(x: 100, y: 100)), selected: true) { item in
-            Image(systemName: item.imageName)
-                .resizable()
-                .frame(width: 50, height: 50)
+struct MovablePreview: View {
+    @State private var selected: UUID?
+
+    var body: some View {
+        VStack {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(.blue.opacity(0.2))
+                .frame(height: 400)
+                .overlay {
+                    MovableObjectView(item: MovableImage(pos: .init(x: 100, y: 100)), selection: $selected, config: MovableObjectViewConfig()) { item in
+                        Image(systemName: item.imageName)
+                    }
+                }
         }
     }
 }
