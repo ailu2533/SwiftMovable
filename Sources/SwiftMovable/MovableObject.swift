@@ -31,7 +31,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         case height
     }
 
-    public init(id: UUID = UUID(), pos: CGPoint, rotationDegree: CGFloat = .zero, width: CGFloat = 0, height: CGFloat = 0) {
+    public init(id: UUID = UUID(), pos: CGPoint, rotationDegree: CGFloat = .zero, width: CGFloat = 50, height: CGFloat = 50) {
         self.id = id
         self.pos = pos
         self.rotationDegree = rotationDegree
