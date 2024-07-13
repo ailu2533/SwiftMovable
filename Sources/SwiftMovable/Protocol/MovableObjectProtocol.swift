@@ -23,7 +23,7 @@ protocol MovableObjectProtocol: Identifiable, Codable {
     func onDragEnd()
     static func == (lhs: Self, rhs: Self) -> Bool
     func hash(into hasher: inout Hasher)
-    var debugText: String { get }
+//    var debugText: String { get }
 }
 
 extension MovableObjectProtocol where Self: Hashable {

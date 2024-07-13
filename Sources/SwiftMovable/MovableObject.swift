@@ -31,10 +31,12 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         case height
     }
 
-    public init(id: UUID = UUID(), pos: CGPoint, rotationDegree: CGFloat = .zero) {
+    public init(id: UUID = UUID(), pos: CGPoint, rotationDegree: CGFloat = .zero, width: CGFloat = 0, height: CGFloat = 0) {
         self.id = id
         self.pos = pos
         self.rotationDegree = rotationDegree
+        self.width = width
+        self.height = height
     }
 
     public required init(from decoder: Decoder) throws {
@@ -92,7 +94,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         hasher.combine(height)
     }
 
-    public var debugText: String {
-        return "MovableObject(id: \(id), position: (\(pos.x), \(pos.y)), rotationDegree: \(rotationDegree), zIndex: \(zIndex), scale: \(scale))"
-    }
+//    public var debugText: String {
+//        return "MovableObject(id: \(id), position: (\(pos.x), \(pos.y)), rotationDegree: \(rotationDegree), zIndex: \(zIndex), scale: \(scale))"
+//    }
 }
