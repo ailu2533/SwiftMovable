@@ -55,7 +55,7 @@ struct MovableAndRotationViewModifier: ViewModifier {
             .border(isSelected ? .cyan : .clear, width: 2)
             .contentShape(Rectangle())
             .overlay(alignment: .bottom, content: {
-                Image(systemName: "arrow.trianglehead.2.clockwise")
+                Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90")
                     .iconStyle()
                     .offset(y: 25)
                     .gesture(rotationDragGesture)
