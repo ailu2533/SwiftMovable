@@ -21,9 +21,14 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "SwiftMovable",
+            resources: [
+                .process("Resources/Media.xcassets")
+            ],
             plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
-
         ),
+        
+
+        
         .testTarget(
             name: "SwiftMovableTests",
             dependencies: ["SwiftMovable"])

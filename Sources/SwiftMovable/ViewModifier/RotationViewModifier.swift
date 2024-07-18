@@ -42,7 +42,7 @@ struct MovableViewModifier: ViewModifier {
             .border(isSelected ? .cyan : .clear, width: 2)
             .contentShape(Rectangle())
             .overlay(alignment: .bottom, content: {
-                Image(systemName: "arrow.trianglehead.2.clockwise")
+                Image(systemName: "arrow.clockwise")
                     .iconStyle()
                     .offset(y: 25)
                     .gesture(rotationDragGesture)
@@ -58,7 +58,7 @@ struct MovableViewModifier: ViewModifier {
                     .opacity(isSelected ? 1 : 0)
             })
             .overlay(alignment: .topTrailing, content: {
-                Image(systemName: "square.and.pencil")
+                Image(systemName: "pencil.and.outline")
                     .iconStyle()
                     .offset(x: 10, y: -10)
                     .opacity(isSelected ? 1 : 0)

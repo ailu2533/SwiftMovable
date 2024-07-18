@@ -13,7 +13,8 @@ struct IconViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .font(.system(size: size))
+//            .font(.system(size: size))
+            .imageScale(.small)
             .fontWeight(.semibold)
             .foregroundColor(.secondary)
             .frame(width: size * 2, height: size * 2)
@@ -55,7 +56,7 @@ struct MovableAndRotationViewModifier: ViewModifier {
             .border(isSelected ? .cyan : .clear, width: 2)
             .contentShape(Rectangle())
             .overlay(alignment: .bottom, content: {
-                Image(systemName: "arrow.trianglehead.2.clockwise.rotate.90")
+                Image(systemName: "arrow.clockwise")
                     .iconStyle()
                     .offset(y: 25)
                     .gesture(rotationDragGesture)
