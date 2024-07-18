@@ -8,12 +8,30 @@
 import Foundation
 import SwiftUI
 
-struct MovableViewModifier: ViewModifier {
+struct IconViewModifier: ViewModifier {
+    var size: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: size))
+            .fontWeight(.semibold)
+            .foregroundColor(.secondary)
+            .frame(width: size * 2, height: size * 2)
+            .background(Color(.systemGray6))
+            .clipShape(Circle())
+            .shadow(radius: 1)
+    }
+}
+
+extension View {
+    func iconStyle(size: CGFloat = 10) -> some View {
+        modifier(IconViewModifier(size: size))
+    }
+}
+
+struct MovableAndRotationViewModifier: ViewModifier {
     @Binding var currentRotation: Angle
     @Binding var position: CGPoint
-
-    @Binding var height: CGFloat
-    @Binding var width: CGFloat
 
     var isSelected = false
 
@@ -22,9 +40,6 @@ struct MovableViewModifier: ViewModifier {
     // 旋转
     @State private var twistAngle: Angle = .zero
 
-    // 缩放
-    @State private var pinchMagnification: CGFloat = 1
-
     // 位置
     @State private var offset: CGSize = .zero
 
@@ -32,8 +47,6 @@ struct MovableViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            // 缩放
-            .frame(width: width * pinchMagnification, height: height * pinchMagnification)
 
             .readSize(callback: {
                 viewSize = $0
@@ -48,28 +61,6 @@ struct MovableViewModifier: ViewModifier {
                     .gesture(rotationDragGesture)
                     .opacity(isSelected ? 1 : 0)
             })
-            .if(isSelected, transform: { view in
-                view.modifier(DraggableModifier(width: $width, height: $height, hasBorder: true))
-            })
-            .overlay(alignment: .topLeading, content: {
-                Image(systemName: "trash")
-                    .iconStyle()
-                    .offset(x: -10, y: -10)
-                    .opacity(isSelected ? 1 : 0)
-            })
-            .overlay(alignment: .topTrailing, content: {
-                Image(systemName: "square.and.pencil")
-                    .iconStyle()
-                    .offset(x: 10, y: -10)
-                    .opacity(isSelected ? 1 : 0)
-            })
-            // square.3.layers.3d.top.filled
-            .overlay(alignment: .bottomLeading, content: {
-                Image(systemName: "square.3.layers.3d.top.filled")
-                    .iconStyle()
-                    .offset(x: -10, y: 10)
-                    .opacity(isSelected ? 1 : 0)
-            })
 
 //             旋转
             .rotationEffect(currentRotation + twistAngle)
@@ -82,7 +73,6 @@ struct MovableViewModifier: ViewModifier {
             .gesture(dragGesture)
             .gesture(
                 rotationGesture
-                    .simultaneously(with: magnificationGesture)
             )
     }
 
@@ -109,19 +99,6 @@ struct MovableViewModifier: ViewModifier {
             }
     }
 
-    private var magnificationGesture: some Gesture {
-        MagnificationGesture()
-            .onChanged({ value in
-                pinchMagnification = value
-            })
-
-            .onEnded { _ in
-                width *= pinchMagnification
-                height *= pinchMagnification
-                pinchMagnification = 1
-            }
-    }
-
     private var rotationDragGesture: some Gesture {
         return DragGesture(coordinateSpace: .named(id))
 
@@ -145,7 +122,7 @@ struct MovableViewModifier: ViewModifier {
     }
 }
 
-public struct RotationPreview: View {
+public struct MovableAndRotation: View {
     public init() {}
 
     @State private var currentRotation: Angle = .zero
@@ -159,14 +136,11 @@ public struct RotationPreview: View {
         ZStack {
             LinearGradient(colors: [.cyan.opacity(0.4), .yellow.opacity(0.4)], startPoint: .topLeading, endPoint: .bottomTrailing)
 
-            Rectangle()
-                .fill(.blue.opacity(0.4))
+            Text("hello world")
                 .modifier(
-                    MovableViewModifier(
+                    MovableAndRotationViewModifier(
                         currentRotation: $currentRotation,
                         position: $position,
-                        height: $height,
-                        width: $width,
                         isSelected: true
                     )
                 )
@@ -175,5 +149,5 @@ public struct RotationPreview: View {
 }
 
 #Preview {
-    RotationPreview()
+    MovableAndRotation()
 }

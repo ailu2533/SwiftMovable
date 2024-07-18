@@ -20,10 +20,9 @@ struct DraggableNode: View {
     let aspectRatio: CGFloat
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill()
-            .frame(width: 40, height: 40)
-            .offset(x: 20, y: 20)
+        Image(systemName: "arrow.up.left.and.arrow.down.right")
+            .iconStyle()
+            .offset(x: 10, y: 10)
 
             .gesture(
                 DragGesture()
