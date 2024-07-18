@@ -13,8 +13,7 @@ struct IconViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-//            .font(.system(size: size))
-            .imageScale(.small)
+            .font(.system(size: size))
             .fontWeight(.semibold)
             .foregroundColor(.secondary)
             .frame(width: size * 2, height: size * 2)
@@ -25,7 +24,7 @@ struct IconViewModifier: ViewModifier {
 }
 
 extension View {
-    func iconStyle(size: CGFloat = 10) -> some View {
+    func iconStyle(size: CGFloat = 9) -> some View {
         modifier(IconViewModifier(size: size))
     }
 }
@@ -60,6 +59,25 @@ struct MovableAndRotationViewModifier: ViewModifier {
                     .iconStyle()
                     .offset(y: 25)
                     .gesture(rotationDragGesture)
+                    .opacity(isSelected ? 1 : 0)
+            })
+            .overlay(alignment: .topLeading, content: {
+                Image(systemName: "trash")
+                    .iconStyle()
+                    .offset(x: -10, y: -10)
+                    .opacity(isSelected ? 1 : 0)
+            })
+            .overlay(alignment: .topTrailing, content: {
+                Image(systemName: "pencil.and.outline")
+                    .iconStyle()
+                    .offset(x: 10, y: -10)
+                    .opacity(isSelected ? 1 : 0)
+            })
+            // square.3.layers.3d.top.filled
+            .overlay(alignment: .bottomLeading, content: {
+                Image(systemName: "square.3.layers.3d.top.filled")
+                    .iconStyle()
+                    .offset(x: -10, y: 10)
                     .opacity(isSelected ? 1 : 0)
             })
 
