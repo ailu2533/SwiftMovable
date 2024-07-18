@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+@available(macOS 14.0, *)
 @Observable
 open class MovableObject: MovableObjectProtocol, Equatable {
     @ObservationIgnored public var id: UUID
@@ -15,7 +16,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
     public var pos: CGPoint = .zero
     public var rotationDegree: CGFloat = .zero
     public var zIndex: Double = 1.0
-    public var scale: CGFloat = 1.0
+//    public var scale: CGFloat = 1.0
 
     public var width: CGFloat = 0
     public var height: CGFloat = 0
@@ -26,7 +27,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         case posY
         case rotationDegree
         case zIndex
-        case scale
+//        case scale
         case width
         case height
     }
@@ -47,7 +48,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         pos = CGPoint(x: posX, y: posY)
         rotationDegree = try container.decode(CGFloat.self, forKey: .rotationDegree)
         zIndex = try container.decode(Double.self, forKey: .zIndex)
-        scale = try container.decode(CGFloat.self, forKey: .scale)
+//        scale = try container.decode(CGFloat.self, forKey: .scale)
         width = try container.decode(CGFloat.self, forKey: .width)
         height = try container.decode(CGFloat.self, forKey: .height)
     }
@@ -59,7 +60,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         try container.encode(pos.y, forKey: .posY)
         try container.encode(rotationDegree, forKey: .rotationDegree)
         try container.encode(zIndex, forKey: .zIndex)
-        try container.encode(scale, forKey: .scale)
+//        try container.encode(scale, forKey: .scale)
         try container.encode(width, forKey: .width)
         try container.encode(height, forKey: .height)
     }
@@ -78,7 +79,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
             && lhs.pos == rhs.pos
             && lhs.rotationDegree == rhs.rotationDegree
             && lhs.zIndex == rhs.zIndex
-            && lhs.scale == rhs.scale
+//            && lhs.scale == rhs.scale
             && lhs.width == rhs.width
             && lhs.height == rhs.height
     }
@@ -89,7 +90,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         hasher.combine(pos.y)
         hasher.combine(rotationDegree)
         hasher.combine(zIndex)
-        hasher.combine(scale)
+//        hasher.combine(scale)
         hasher.combine(width)
         hasher.combine(height)
     }

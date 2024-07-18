@@ -15,7 +15,7 @@ protocol MovableObjectProtocol: Identifiable, Codable {
     var pos: CGPoint { get set }
     var rotationDegree: CGFloat { get set }
     var zIndex: Double { get set }
-    var scale: CGFloat { get set }
+//    var scale: CGFloat { get set }
     var width: CGFloat { get set }
     var height: CGFloat { get set }
 
@@ -32,7 +32,7 @@ extension MovableObjectProtocol where Self: Hashable {
             && lhs.pos == rhs.pos
             && lhs.rotationDegree == rhs.rotationDegree
             && lhs.zIndex == rhs.zIndex
-            && lhs.scale == rhs.scale
+//            && lhs.scale == rhs.scale
             && lhs.width == rhs.width
             && lhs.height == rhs.height
     }
@@ -43,7 +43,7 @@ extension MovableObjectProtocol where Self: Hashable {
         hasher.combine(pos.y)
         hasher.combine(rotationDegree)
         hasher.combine(zIndex)
-        hasher.combine(scale)
+//        hasher.combine(scale)
         hasher.combine(width)
         hasher.combine(height)
     }

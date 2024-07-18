@@ -46,8 +46,6 @@ struct MovableModifier: ViewModifier {
             }
     }
 
-
-
     func body(content: Content) -> some View {
         return content
             .position(x: positionX, y: positionY)

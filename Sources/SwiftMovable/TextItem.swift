@@ -79,7 +79,7 @@ extension TextItem {
         copy.offset = offset // CGPoint 是结构体，自动进行值拷贝
         copy.rotationDegree = rotationDegree // CGFloat 是基本数据类型，自动进行值拷贝
         copy.zIndex = zIndex // Double 是基本数据类型，自动进行值拷贝
-        copy.scale = scale // CGFloat 是基本数据类型，自动进行值拷贝
+//        copy.scale = scale // CGFloat 是基本数据类型，自动进行值拷贝
 
         // TextItem specific properties
         copy.text = text // String 是值类型，自动进行值拷贝
