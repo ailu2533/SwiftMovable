@@ -13,7 +13,7 @@ let package = Package(
             targets: ["SwiftMovable"])
     ],
     dependencies: [
-        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.55.1")
+//        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.55.1")
     ],
 
     targets: [
@@ -23,8 +23,7 @@ let package = Package(
             name: "SwiftMovable",
             resources: [
                 .process("Resources/Media.xcassets")
-            ],
-            plugins: [.plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins")]
+            ]
         ),
         
 
