@@ -154,37 +154,3 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
         return Angle(radians: angleDifference)
     }
 }
-
-// public struct RotationPreview: View {
-//    public init() {}
-//
-//    @State private var currentRotation: Angle = .zero
-//
-//    @State private var height: CGFloat = 100
-//    @State private var width: CGFloat = 100
-//
-//    @State private var position: CGPoint = .init(x: 200, y: 200)
-//
-//    public var body: some View {
-//        ZStack {
-//            LinearGradient(colors: [.cyan.opacity(0.4), .yellow.opacity(0.4)], startPoint: .topLeading, endPoint: .bottomTrailing)
-//
-//            Rectangle()
-//                .fill(.blue.opacity(0.4))
-//                .modifier(
-//                    MovableViewModifier(
-//                        currentRotation: $currentRotation,
-//                        position: $position,
-//                        height: $height,
-//                        width: $width,
-//                        isSelected: true,
-//
-//                    )
-//                )
-//        }
-//    }
-// }
-//
-// #Preview {
-//    RotationPreview()
-// }

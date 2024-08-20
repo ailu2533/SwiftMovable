@@ -31,13 +31,12 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
 
     public var body: some View {
         content(item)
+            .zIndex(item.zIndex)
             .modifier(MovableViewModifier(
-                currentRotation:
-                Binding(get: {
-                    Angle(degrees: item.rotationDegree)
-                }, set: { value in
-                    item.rotationDegree = value.degrees
-                }),
+                currentRotation: Binding(
+                    get: { Angle(degrees: item.rotationDegree) },
+                    set: { item.rotationDegree = $0.degrees }
+                ),
                 position: $item.pos,
                 height: $item.height,
                 width: $item.width,
@@ -45,10 +44,11 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
                 config: config,
                 item: item
             ))
-
+            .disabled(!selected)
             .onTapGesture {
-                config.onTap(item)
                 selection = item
+                item.zIndex = Date().timeIntervalSince1970
+                config.onTap(item)
             }
     }
 }
