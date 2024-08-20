@@ -16,7 +16,7 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     var content: (Item) -> Content
 
     var selected: Bool { selection == item.id }
-    var showControl: Bool { selected && config.enable }
+    var showControl: Bool { selected && config.isEnabled }
 
     // MARK: - Initializer
 
@@ -41,12 +41,13 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
                 position: $item.pos,
                 height: $item.height,
                 width: $item.width,
-                isSelected: selected
-
+                isSelected: selected,
+                config: config,
+                item: item
             ))
 
             .onTapGesture {
-                config.tapCallback(item)
+                config.onTap(item)
                 selection = item.id
             }
     }
@@ -68,7 +69,7 @@ public struct MovablePreview: View {
     @State private var item = MovableImage(pos: .init(x: 100, y: 100))
 
     public var body: some View {
-        MovableObjectView(item: item, selection: $selected, config: MovableObjectViewConfig()) { item in
+        MovableObjectView(item: item, selection: $selected, config: MovableObjectViewConfig.Builder().build()) { item in
             Image(systemName: item.imageName)
                 .resizable()
                 .scaledToFit()

@@ -5,6 +5,7 @@
 //  Created by ailu on 2024/4/22.
 //
 
+import ColorKit
 import SwiftUI
 
 // extension TextItem: Stylable {
@@ -66,7 +67,7 @@ public final class TextItem: MovableObject, Hashable {
     @ViewBuilder
     public func view() -> some View {
         Text(text)
-//            .foregroundStyle(color)
+            .foregroundStyle(Color(uiColor: UIColor(hex: colorHex) ?? .black))
             .font(fontName == nil ? .system(size: fontSize) : .custom(fontName!, size: fontSize))
     }
 }

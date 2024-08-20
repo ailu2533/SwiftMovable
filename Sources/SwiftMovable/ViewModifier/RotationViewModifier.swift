@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct MovableViewModifier: ViewModifier {
+struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     @Binding var currentRotation: Angle
     @Binding var position: CGPoint
 
@@ -16,6 +16,8 @@ struct MovableViewModifier: ViewModifier {
     @Binding var width: CGFloat
 
     var isSelected = false
+    var config: MovableObjectViewConfig
+    var item: Item
 
     @State private var viewSize: CGSize = .zero
 
@@ -33,7 +35,9 @@ struct MovableViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             // 缩放
-            .frame(width: width * pinchMagnification, height: height * pinchMagnification)
+            .if(config.isResizable, transform: { view in
+                view.frame(width: width * pinchMagnification, height: height * pinchMagnification)
+            })
 
             .readSize(callback: {
                 viewSize = $0
@@ -48,14 +52,20 @@ struct MovableViewModifier: ViewModifier {
                     .gesture(rotationDragGesture)
                     .opacity(isSelected ? 1 : 0)
             })
-            .if(isSelected, transform: { view in
+            .if(isSelected && config.isResizable, transform: { view in
                 view.modifier(DraggableModifier(width: $width, height: $height, hasBorder: true))
             })
             .overlay(alignment: .topLeading, content: {
-                Image(systemName: "trash")
-                    .iconStyle()
-                    .offset(x: -10, y: -10)
-                    .opacity(isSelected ? 1 : 0)
+                Button(action: {
+                    config.onDelete(item)
+                }, label: {
+                    Image(systemName: "trash")
+                        .iconStyle()
+                        .offset(x: -10, y: -10)
+                        .opacity(isSelected ? 1 : 0)
+                })
+                .buttonStyle(PlainButtonStyle())
+
             })
             .overlay(alignment: .topTrailing, content: {
                 Image(systemName: "pencil.and.outline")
@@ -145,35 +155,36 @@ struct MovableViewModifier: ViewModifier {
     }
 }
 
-public struct RotationPreview: View {
-    public init() {}
-
-    @State private var currentRotation: Angle = .zero
-
-    @State private var height: CGFloat = 100
-    @State private var width: CGFloat = 100
-
-    @State private var position: CGPoint = .init(x: 200, y: 200)
-
-    public var body: some View {
-        ZStack {
-            LinearGradient(colors: [.cyan.opacity(0.4), .yellow.opacity(0.4)], startPoint: .topLeading, endPoint: .bottomTrailing)
-
-            Rectangle()
-                .fill(.blue.opacity(0.4))
-                .modifier(
-                    MovableViewModifier(
-                        currentRotation: $currentRotation,
-                        position: $position,
-                        height: $height,
-                        width: $width,
-                        isSelected: true
-                    )
-                )
-        }
-    }
-}
-
-#Preview {
-    RotationPreview()
-}
+// public struct RotationPreview: View {
+//    public init() {}
+//
+//    @State private var currentRotation: Angle = .zero
+//
+//    @State private var height: CGFloat = 100
+//    @State private var width: CGFloat = 100
+//
+//    @State private var position: CGPoint = .init(x: 200, y: 200)
+//
+//    public var body: some View {
+//        ZStack {
+//            LinearGradient(colors: [.cyan.opacity(0.4), .yellow.opacity(0.4)], startPoint: .topLeading, endPoint: .bottomTrailing)
+//
+//            Rectangle()
+//                .fill(.blue.opacity(0.4))
+//                .modifier(
+//                    MovableViewModifier(
+//                        currentRotation: $currentRotation,
+//                        position: $position,
+//                        height: $height,
+//                        width: $width,
+//                        isSelected: true,
+//
+//                    )
+//                )
+//        }
+//    }
+// }
+//
+// #Preview {
+//    RotationPreview()
+// }
