@@ -22,7 +22,7 @@ struct DraggableNode: View {
     var body: some View {
         Image(systemName: "arrow.up.left.and.arrow.down.right")
             .iconStyle()
-            .offset(x: 10, y: 10)
+            .offset(x: Offset, y: Offset)
 
             .gesture(
                 DragGesture()

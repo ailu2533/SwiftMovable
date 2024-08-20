@@ -61,7 +61,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
                 }, label: {
                     Image(systemName: "trash")
                         .iconStyle()
-                        .offset(x: -16, y: -16)
+                        .offset(x: -Offset, y: -Offset)
                         .opacity(isSelected ? 1 : 0)
                 })
                 .buttonStyle(PlainButtonStyle())
@@ -70,14 +70,14 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .overlay(alignment: .topTrailing, content: {
                 Image(systemName: "pencil.and.outline")
                     .iconStyle()
-                    .offset(x: 16, y: -16)
+                    .offset(x: Offset, y: -Offset)
                     .opacity(isSelected ? 1 : 0)
             })
             // square.3.layers.3d.top.filled
             .overlay(alignment: .bottomLeading, content: {
                 Image(systemName: "square.3.layers.3d.top.filled")
                     .iconStyle()
-                    .offset(x: -16, y: 16)
+                    .offset(x: -Offset, y: Offset)
                     .opacity(isSelected ? 1 : 0)
             })
 
