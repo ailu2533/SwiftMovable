@@ -16,7 +16,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     @Binding var width: CGFloat
 
     var isSelected = false
-    var config: MovableObjectViewConfig
+    var config: MovableObjectViewConfig<Item>
     var item: Item
 
     @State private var viewSize: CGSize = .zero

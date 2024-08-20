@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct MovableObjectViewConfig {
-    public typealias MovableObjectCallback = (MovableObject) -> Void
+public struct MovableObjectViewConfig<Item: MovableObject> {
+    public typealias MovableObjectCallback = (Item) -> Void
 
     public let parentSize: CGSize?
     public let isEnabled: Bool
@@ -67,8 +67,8 @@ public struct MovableObjectViewConfig {
             return self
         }
 
-        public func build() -> MovableObjectViewConfig {
-            return MovableObjectViewConfig(builder: self)
+        public func build() -> MovableObjectViewConfig<Item> {
+            return MovableObjectViewConfig<Item>(builder: self)
         }
     }
 }

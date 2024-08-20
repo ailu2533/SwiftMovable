@@ -13,7 +13,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
 
     var item: Item
     @Binding var selection: MovableObject?
-    private var config: MovableObjectViewConfig
+    private var config: MovableObjectViewConfig<Item>
     var content: (Item) -> Content
 
     @State private var viewSize: CGSize = .zero
@@ -36,7 +36,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
 
 //    var parentCoordinateSpaceID: UUID
 
-    public init(item: Item, selection: Binding<MovableObject?>, config: MovableObjectViewConfig, content: @escaping (Item) -> Content) {
+    public init(item: Item, selection: Binding<MovableObject?>, config: MovableObjectViewConfig<Item>, content: @escaping (Item) -> Content) {
 //        self.parentCoordinateSpaceID = confi
         self.item = item
         self.config = config
