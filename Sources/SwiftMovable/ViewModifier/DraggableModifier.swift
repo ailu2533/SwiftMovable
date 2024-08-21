@@ -41,8 +41,12 @@ struct DraggableNode: View {
                             newHeight = height + value.translation.height
                             newWidth = newHeight * aspectRatio
                         case .bottomRight:
-                            newHeight = height + value.translation.height
-                            newWidth = newHeight * aspectRatio
+
+                            newWidth = width + value.translation.width
+                            newHeight = newWidth / aspectRatio
+
+//                            newHeight = height + value.translation.height
+//                            newWidth = newHeight * aspectRatio
                         }
 
                         // 确保最短的边至少为10，并避免除以零的情况
