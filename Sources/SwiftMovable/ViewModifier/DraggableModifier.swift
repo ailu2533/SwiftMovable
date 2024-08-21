@@ -65,15 +65,22 @@ struct DraggableModifier: ViewModifier {
     @Binding var width: CGFloat
     @Binding var height: CGFloat
 
-    @State private var aspectRatio: CGFloat = 1.0
+    let aspectRatio: CGFloat
 
     let hasBorder: Bool
 
+    init(width: Binding<CGFloat>, height: Binding<CGFloat>, hasBorder: Bool) {
+        aspectRatio = width.wrappedValue / height.wrappedValue
+        _width = width
+        _height = height
+        self.hasBorder = hasBorder
+    }
+
     func body(content: Content) -> some View {
         content
-            .readSize(callback: { size in
-                aspectRatio = size.width / size.height
-            })
+//            .readSize(callback: { size in
+//                aspectRatio = size.width / size.height
+//            })
             .overlay(alignment: .bottomTrailing) {
                 DraggableNode(width: $width, height: $height, nodeType: .bottomRight, aspectRatio: aspectRatio)
             }
