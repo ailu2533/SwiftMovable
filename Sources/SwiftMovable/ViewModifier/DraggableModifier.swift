@@ -46,16 +46,19 @@ struct DraggableNode: View {
                         }
 
                         // 确保最短的边至少为10，并避免除以零的情况
-                        let minDimension = max(1, min(newWidth, newHeight)) // 使用1作为最小值，避免除以零
-                        if minDimension < 40 {
-                            let scale = 40 / minDimension
-                            newWidth = max(40, newWidth * scale)
-                            newHeight = max(40, newHeight * scale)
-                        }
+//                        let minDimension = max(1, min(newWidth, newHeight)) // 使用1作为最小值，避免除以零
+//                        if minDimension < 40 {
+//                            let scale = 40 / minDimension
+//                            newWidth = max(40, newWidth * scale)
+//                            newHeight = max(40, newHeight * scale)
+//                        }
+//
+//                        // 额外的安全检查
+//                        width = max(40, newWidth)
+//                        height = max(40, newHeight)
 
-                        // 额外的安全检查
-                        width = max(40, newWidth)
-                        height = max(40, newHeight)
+                        width = newWidth
+                        height = newHeight
                     }
             )
     }
