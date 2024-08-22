@@ -53,7 +53,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
                     .opacity(isSelected ? 1 : 0)
             })
             .if(isSelected && config.isResizable, transform: { view in
-                view.modifier(DraggableModifier(width: $width, height: $height, hasBorder: true))
+                view.modifier(DraggableModifier(width: $width, height: $height, hasBorder: true, item: item, onResize: config.onResize))
             })
             .overlay(alignment: .topLeading, content: {
                 Button(action: {

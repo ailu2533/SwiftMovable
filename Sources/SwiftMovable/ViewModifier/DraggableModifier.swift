@@ -13,11 +13,14 @@ enum NodePosition {
     case topLeft, topRight, bottomLeft, bottomRight
 }
 
-struct DraggableNode: View {
+struct DraggableNode<Item: MovableObject>: View {
     @Binding var width: CGFloat
     @Binding var height: CGFloat
     let nodeType: NodePosition
     let aspectRatio: CGFloat
+    var item: Item
+
+    var resizeCallback: (Item, CGSize) -> CGSize = { _, x in x }
 
     var body: some View {
         Image(systemName: "arrow.up.left.and.arrow.down.right")
@@ -44,52 +47,38 @@ struct DraggableNode: View {
 
                             newWidth = width + value.translation.width
                             newHeight = newWidth / aspectRatio
-
-//                            newHeight = height + value.translation.height
-//                            newWidth = newHeight * aspectRatio
                         }
 
-                        // 确保最短的边至少为10，并避免除以零的情况
-//                        let minDimension = max(1, min(newWidth, newHeight)) // 使用1作为最小值，避免除以零
-//                        if minDimension < 40 {
-//                            let scale = 40 / minDimension
-//                            newWidth = max(40, newWidth * scale)
-//                            newHeight = max(40, newHeight * scale)
-//                        }
-//
-//                        // 额外的安全检查
-//                        width = max(40, newWidth)
-//                        height = max(40, newHeight)
+                        let newSize = resizeCallback(item, .init(width: newWidth, height: newHeight))
 
-                        width = newWidth
-                        height = newHeight
+                        width = newSize.width
+                        height = newSize.height
                     }
             )
     }
 }
 
-struct DraggableModifier: ViewModifier {
+struct DraggableModifier<Item: MovableObject>: ViewModifier {
     @Binding var width: CGFloat
     @Binding var height: CGFloat
-
+    // 宽高比
     let aspectRatio: CGFloat
+//    let hasBorder: Bool
+    let onResize: (Item, CGSize) -> CGSize
+    var item: Item
 
-    let hasBorder: Bool
-
-    init(width: Binding<CGFloat>, height: Binding<CGFloat>, hasBorder: Bool) {
+    init(width: Binding<CGFloat>, height: Binding<CGFloat>, hasBorder: Bool, item: Item, onResize: @escaping (Item, CGSize) -> CGSize) {
         aspectRatio = width.wrappedValue / height.wrappedValue
         _width = width
         _height = height
-        self.hasBorder = hasBorder
+        self.onResize = onResize
+        self.item = item
     }
 
     func body(content: Content) -> some View {
         content
-//            .readSize(callback: { size in
-//                aspectRatio = size.width / size.height
-//            })
             .overlay(alignment: .bottomTrailing) {
-                DraggableNode(width: $width, height: $height, nodeType: .bottomRight, aspectRatio: aspectRatio)
+                DraggableNode(width: $width, height: $height, nodeType: .bottomRight, aspectRatio: aspectRatio, item: item, resizeCallback: onResize)
             }
     }
 }

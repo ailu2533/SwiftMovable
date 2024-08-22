@@ -35,6 +35,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         self.rotationDegree = rotationDegree
         self.width = width
         self.height = height
+        zIndex = Date().timeIntervalSince1970
     }
 
     public required init(from decoder: Decoder) throws {
