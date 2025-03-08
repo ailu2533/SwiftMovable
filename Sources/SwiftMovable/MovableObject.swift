@@ -13,7 +13,13 @@ import SwiftUI
 open class MovableObject: MovableObjectProtocol, Equatable {
     // MARK: Lifecycle
 
-    public init(id: UUID = UUID(), pos: CGPoint, rotationDegree: CGFloat = .zero, width: CGFloat = 50, height: CGFloat = 50) {
+    public init(
+        id: UUID = UUID(),
+        pos: CGPoint,
+        rotationDegree: CGFloat = .zero,
+        width: CGFloat = 50,
+        height: CGFloat = 50
+    ) {
         self.id = id
         self.pos = pos
         self.rotationDegree = rotationDegree
@@ -36,7 +42,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
 
     // MARK: Public
 
-    @ObservationIgnored public var id: UUID
+    public let id: UUID
     public var offset: CGPoint = .zero
     public var pos: CGPoint = .zero
     public var rotationDegree: CGFloat = .zero

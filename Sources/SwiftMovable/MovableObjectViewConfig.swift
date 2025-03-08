@@ -28,8 +28,6 @@ public struct MovableObjectViewConfig<Item: MovableObject> {
     public class Builder {
         // MARK: Lifecycle
 
-//        var onResize2: ResizeCallback2 = { _, proposedSize in proposedSize }
-
         public init() {}
 
         // MARK: Public

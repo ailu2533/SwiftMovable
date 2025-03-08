@@ -12,7 +12,7 @@ import SwiftUI
 // MARK: - MovableObjectProtocol
 
 protocol MovableObjectProtocol: Identifiable {
-    var id: UUID { get set }
+    var id: UUID { get }
     var offset: CGPoint { get set }
     var pos: CGPoint { get set }
     var rotationDegree: CGFloat { get set }
@@ -32,7 +32,6 @@ extension MovableObjectProtocol where Self: Hashable {
             && lhs.pos == rhs.pos
             && lhs.rotationDegree == rhs.rotationDegree
             && lhs.zIndex == rhs.zIndex
-//            && lhs.scale == rhs.scale
             && lhs.width == rhs.width
             && lhs.height == rhs.height
     }
@@ -43,7 +42,6 @@ extension MovableObjectProtocol where Self: Hashable {
         hasher.combine(pos.y)
         hasher.combine(rotationDegree)
         hasher.combine(zIndex)
-//        hasher.combine(scale)
         hasher.combine(width)
         hasher.combine(height)
     }
