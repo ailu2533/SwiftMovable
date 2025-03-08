@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MovableModifier.swift
 //
 //
 //  Created by ailu on 2024/7/13.
@@ -47,7 +47,7 @@ struct MovableModifier: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        return content
+        content
             .position(x: positionX, y: positionY)
             .offset(x: offsetX, y: offsetY)
             .gesture(dragGesture)

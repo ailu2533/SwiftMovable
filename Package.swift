@@ -5,15 +5,16 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftMovable",
-    platforms: [.iOS(.v17),.macOS(.v14)],
+    platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "SwiftMovable",
-            targets: ["SwiftMovable"])
+            targets: ["SwiftMovable"]
+        ),
     ],
     dependencies: [
-//        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.55.1")
+        //        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.55.1")
     ],
 
     targets: [
@@ -22,14 +23,13 @@ let package = Package(
         .target(
             name: "SwiftMovable",
             resources: [
-                .process("Resources/Media.xcassets")
+                .process("Resources/Media.xcassets"),
             ]
         ),
-        
 
-        
         .testTarget(
             name: "SwiftMovableTests",
-            dependencies: ["SwiftMovable"])
+            dependencies: ["SwiftMovable"]
+        ),
     ]
 )

@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  View+If.swift
+//
 //
 //  Created by ailu on 2024/7/12.
 //
@@ -8,14 +8,14 @@
 import Foundation
 import SwiftUI
 
-extension View {
+public extension View {
     /// Applies the given transform if the given condition evaluates to `true`.
     /// - Parameters:
     ///   - condition: The condition to evaluate.
     ///   - transform: The transform to apply to the source `View`.
     /// - Returns: Either the original `View` or the modified `View` if the condition is `true`.
     @ViewBuilder
-    public func `if`<Content: View>(_ condition: Bool, transform: (Self) -> Content) -> some View {
+    func `if`(_ condition: Bool, transform: (Self) -> some View) -> some View {
         if condition {
             transform(self)
         } else {

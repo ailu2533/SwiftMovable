@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MovableObjectViewConfig.swift
 //
 //
 //  Created by ailu on 2024/7/12.
@@ -38,7 +38,7 @@ public struct MovableObjectViewConfig<Item: MovableObject> {
         var onEdit: MovableObjectCallback = { _ in }
         var onTap: MovableObjectCallback = { _ in }
         var isResizable: Bool = false
-        var onResize: ResizeCallback = { _,proposedSize in proposedSize }
+        var onResize: ResizeCallback = { _, proposedSize in proposedSize }
 //        var onResize2: ResizeCallback2 = { _, proposedSize in proposedSize }
 
         public init() {}
@@ -79,7 +79,7 @@ public struct MovableObjectViewConfig<Item: MovableObject> {
         }
 
         public func build() -> MovableObjectViewConfig<Item> {
-            return MovableObjectViewConfig<Item>(builder: self)
+            MovableObjectViewConfig<Item>(builder: self)
         }
     }
 }

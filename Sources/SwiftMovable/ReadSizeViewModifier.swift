@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ReadSizeViewModifier.swift
 //
 //
 //  Created by ailu on 2024/4/30.
@@ -10,15 +10,14 @@ import SwiftUI
 struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
 
-    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
-    }
+    static func reduce(value _: inout CGSize, nextValue _: () -> CGSize) {}
 }
 
 struct ReadSizeViewModifier: ViewModifier {
     let callback: (CGSize) -> Void
 
     func body(content: Content) -> some View {
-        return content.background(content: {
+        content.background(content: {
             GeometryReader(content: { geometry in
                 Color.clear.onAppear(perform: {
                     callback(geometry.size)
@@ -32,9 +31,9 @@ struct ReadSizeViewModifier: ViewModifier {
     }
 }
 
-extension View {
-    public func readSize(callback: @escaping (CGSize) -> Void) -> some View {
-        return modifier(ReadSizeViewModifier(callback: callback))
+public extension View {
+    func readSize(callback: @escaping (CGSize) -> Void) -> some View {
+        modifier(ReadSizeViewModifier(callback: callback))
     }
 }
 
@@ -50,7 +49,7 @@ struct MaxWidthViewModifier: ViewModifier {
     let callback: (CGFloat) -> Void
 
     func body(content: Content) -> some View {
-        return content.background(content: {
+        content.background(content: {
             GeometryReader(content: { geometry in
                 Color.clear.onAppear(perform: {
                     callback(geometry.size.width)
@@ -64,8 +63,8 @@ struct MaxWidthViewModifier: ViewModifier {
     }
 }
 
-extension View {
-    public func maxWidth(callback: @escaping (CGFloat) -> Void) -> some View {
-        return modifier(MaxWidthViewModifier(callback: callback))
+public extension View {
+    func maxWidth(callback: @escaping (CGFloat) -> Void) -> some View {
+        modifier(MaxWidthViewModifier(callback: callback))
     }
 }

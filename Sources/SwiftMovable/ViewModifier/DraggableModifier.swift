@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DraggableModifier.swift
 //
 //
 //  Created by ailu on 2024/7/3.
@@ -26,7 +26,6 @@ struct DraggableNode<Item: MovableObject>: View {
         Image(systemName: "arrow.up.left.and.arrow.down.right")
             .iconStyle()
             .offset(x: Offset, y: Offset)
-
             .gesture(
                 DragGesture()
                     .onChanged { value in
@@ -67,7 +66,7 @@ struct DraggableModifier<Item: MovableObject>: ViewModifier {
     let onResize: (Item, CGSize) -> CGSize
     var item: Item
 
-    init(width: Binding<CGFloat>, height: Binding<CGFloat>, hasBorder: Bool, item: Item, onResize: @escaping (Item, CGSize) -> CGSize) {
+    init(width: Binding<CGFloat>, height: Binding<CGFloat>, hasBorder _: Bool, item: Item, onResize: @escaping (Item, CGSize) -> CGSize) {
         aspectRatio = width.wrappedValue / height.wrappedValue
         _width = width
         _height = height

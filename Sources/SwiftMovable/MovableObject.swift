@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MovableObject.swift
 //
 //
 //  Created by ailu on 2024/4/27.
@@ -71,7 +71,7 @@ open class MovableObject: MovableObjectProtocol, Equatable {
     }
 
     public static func == (lhs: MovableObject, rhs: MovableObject) -> Bool {
-        return lhs.id == rhs.id
+        lhs.id == rhs.id
             && lhs.pos == rhs.pos
             && lhs.rotationDegree == rhs.rotationDegree
             && lhs.zIndex == rhs.zIndex

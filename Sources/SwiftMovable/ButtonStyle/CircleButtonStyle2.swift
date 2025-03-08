@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CircleButtonStyle2.swift
 //
 //
 //  Created by ailu on 2024/7/12.
@@ -11,8 +11,7 @@ import SwiftUI
 public struct CircleButtonStyle2: ButtonStyle {
     @Environment(\.isEnabled) var isEnabled
 
-    public init() {
-    }
+    public init() {}
 
     public func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label

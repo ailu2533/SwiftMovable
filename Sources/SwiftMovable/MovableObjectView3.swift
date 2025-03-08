@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  MovableObjectView3.swift
 //  SwiftMovable
 //
 //  Created by ailu on 2024/7/17.
@@ -31,7 +31,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
     }
 
     var showControl: Bool {
-        return selected && config.isEnabled
+        selected && config.isEnabled
     }
 
 //    var parentCoordinateSpaceID: UUID
@@ -93,9 +93,9 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
                 state = true
             })
 
-            .onEnded({ value in
+            .onEnded { value in
                 item.rotationDegree += calculateRotation(value: value).degrees
-            })
+            }
 
         return Image(systemName: "arrow.triangle.2.circlepath")
             .resizable()
@@ -115,7 +115,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
     }
 
     var topCorner: some View {
-        return Rectangle()
+        Rectangle()
             .stroke(lineWidth: 1.0)
 //            .shadow(color: Color(.systemBackground), radius: 0.1)
             .foregroundStyle(Color(.blue))
@@ -136,7 +136,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
     }
 
     private func isWithinBounds(x: CGFloat, y: CGFloat, parentSize: CGSize) -> Bool {
-        return !(x < 0 || y < 0 || x > parentSize.width || y > parentSize.height)
+        !(x < 0 || y < 0 || x > parentSize.width || y > parentSize.height)
     }
 
     @State private var lastUpdateTime = Date()
@@ -146,7 +146,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
             .updating($isDragging, body: { _, state, _ in
                 state = true
             })
-            .onChanged({ value in
+            .onChanged { value in
                 let now = Date()
                 let timeInterval = now.timeIntervalSince(lastUpdateTime)
                 guard timeInterval > 0.017 else {
@@ -170,18 +170,18 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
                     let centerY = parentSize.height / 2
                     let snapThreshold: CGFloat = 5
 
-                    if abs(item.pos.x - centerX) < 2 && abs(translation.width) < snapThreshold {
+                    if abs(item.pos.x - centerX) < 2, abs(translation.width) < snapThreshold {
                         translation.width = 0
                     }
 
-                    if abs(item.pos.y - centerY) < 2 && abs(translation.height) < snapThreshold {
+                    if abs(item.pos.y - centerY) < 2, abs(translation.height) < snapThreshold {
                         translation.height = 0
                     }
                 }
 
                 item.onDragChanged(translation: translation)
-            })
-            .onEnded({ _ in
+            }
+            .onEnded { _ in
                 var finalX = item.pos.x + item.offset.x
                 var finalY = item.pos.y + item.offset.y
 
@@ -199,7 +199,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
 
                 // 重置偏移量
                 item.offset = .zero
-            })
+            }
     }
 
     // 定义一个辅助函数来处理吸附逻辑
@@ -239,7 +239,7 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
                 selection = item
             }
 //            .zIndex(selection == item ? 1 : 0)
-            .onChange(of: isDragging) { _, newValue in
+            .onChange(of: isDragging) { _, _ in
 //                draggingState.isDragging = newValue
 //                print("isDragging 1: \(newValue)")
             }
@@ -255,13 +255,12 @@ public struct MovableObjectView3<Item: MovableObject, Content: View>: View {
 //                MovableObjectView3(item: MovableImage(pos: .init(x: 100, y: 100)), selected: true) { item in
 //                    Image(systemName: item.imageName)
 //                }
-                
+
                 MovableObjectView3(item: MovableImage(pos: .init(x: 100, y: 100)), selection: .constant(nil), config: MovableObjectViewConfig.Builder().build()) { item in
                     Image(systemName: item.imageName)
                         .resizable()
                         .scaledToFit()
                 }
-                
             }
 
 //        MovableObjectView3(textItem: MovableImage(pos: .init(x: 100, y: 100)), selected: true) { item in

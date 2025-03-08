@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  RotationViewModifier.swift
 //
 //
 //  Created by ailu on 2024/7/13.
@@ -85,10 +85,8 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .rotationEffect(currentRotation + twistAngle)
 //             移动
             .coordinateSpace(name: id)
-
             .position(position)
             .offset(offset)
-
             .gesture(dragGesture)
             .gesture(
                 rotationGesture
@@ -109,9 +107,9 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
 
     private var rotationGesture: some Gesture {
         RotationGesture()
-            .onChanged({ value in
+            .onChanged { value in
                 twistAngle = value
-            })
+            }
 
             .onEnded { _ in
                 currentRotation += twistAngle
@@ -121,9 +119,9 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
 
     private var magnificationGesture: some Gesture {
         MagnificationGesture()
-            .onChanged({ value in
+            .onChanged { value in
                 pinchMagnification = value
-            })
+            }
 
             .onEnded { _ in
                 width *= pinchMagnification
@@ -133,11 +131,11 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     }
 
     private var rotationDragGesture: some Gesture {
-        return DragGesture(coordinateSpace: .named(id))
+        DragGesture(coordinateSpace: .named(id))
 
-            .onChanged({ value in
+            .onChanged { value in
                 twistAngle = calculateRotation(value: value)
-            })
+            }
 
             .onEnded { _ in
                 currentRotation += twistAngle

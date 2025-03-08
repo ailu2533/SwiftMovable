@@ -1,5 +1,5 @@
-import XCTest
 @testable import SwiftMovable
+import XCTest
 
 final class SwiftMovableTests: XCTestCase {
     func testExample() throws {
