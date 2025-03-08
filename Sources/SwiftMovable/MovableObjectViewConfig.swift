@@ -8,18 +8,7 @@
 import Foundation
 
 public struct MovableObjectViewConfig<Item: MovableObject> {
-    public typealias MovableObjectCallback = (Item) -> Void
-    public typealias ResizeCallback = (Item, CGSize) -> CGSize
-
-    public let parentSize: CGSize?
-    public let isEnabled: Bool
-    public let onDelete: MovableObjectCallback
-    public let onEdit: MovableObjectCallback
-    public let onTap: MovableObjectCallback
-    public let onResize: ResizeCallback
-
-    // 是否可以放缩
-    public let isResizable: Bool
+    // MARK: Lifecycle
 
     private init(builder: Builder) {
         parentSize = builder.parentSize
@@ -31,17 +20,19 @@ public struct MovableObjectViewConfig<Item: MovableObject> {
         onResize = builder.onResize
     }
 
+    // MARK: Public
+
+    public typealias MovableObjectCallback = (Item) -> Void
+    public typealias ResizeCallback = (Item, CGSize) -> CGSize
+
     public class Builder {
-        var parentSize: CGSize?
-        var isEnabled: Bool = true
-        var onDelete: MovableObjectCallback = { _ in }
-        var onEdit: MovableObjectCallback = { _ in }
-        var onTap: MovableObjectCallback = { _ in }
-        var isResizable: Bool = false
-        var onResize: ResizeCallback = { _, proposedSize in proposedSize }
+        // MARK: Lifecycle
+
 //        var onResize2: ResizeCallback2 = { _, proposedSize in proposedSize }
 
         public init() {}
+
+        // MARK: Public
 
         public func setParentSize(_ size: CGSize?) -> Builder {
             parentSize = size
@@ -81,5 +72,25 @@ public struct MovableObjectViewConfig<Item: MovableObject> {
         public func build() -> MovableObjectViewConfig<Item> {
             MovableObjectViewConfig<Item>(builder: self)
         }
+
+        // MARK: Internal
+
+        var parentSize: CGSize?
+        var isEnabled: Bool = true
+        var onDelete: MovableObjectCallback = { _ in }
+        var onEdit: MovableObjectCallback = { _ in }
+        var onTap: MovableObjectCallback = { _ in }
+        var isResizable: Bool = false
+        var onResize: ResizeCallback = { _, proposedSize in proposedSize }
     }
+
+    public let parentSize: CGSize?
+    public let isEnabled: Bool
+    public let onDelete: MovableObjectCallback
+    public let onEdit: MovableObjectCallback
+    public let onTap: MovableObjectCallback
+    public let onResize: ResizeCallback
+
+    // 是否可以放缩
+    public let isResizable: Bool
 }

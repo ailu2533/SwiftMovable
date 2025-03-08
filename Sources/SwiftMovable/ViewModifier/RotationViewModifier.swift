@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct MovableViewModifier<Item: MovableObject>: ViewModifier {
+    // MARK: Internal
+
     @Binding var currentRotation: Angle
     @Binding var position: CGPoint
 
@@ -19,28 +21,16 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     var config: MovableObjectViewConfig<Item>
     var item: Item
 
-    @State private var viewSize: CGSize = .zero
-
-    // 旋转
-    @State private var twistAngle: Angle = .zero
-
-    // 缩放
-    @State private var pinchMagnification: CGFloat = 1
-
-    // 位置
-    @State private var offset: CGSize = .zero
-
-    private let id = UUID()
-
     func body(content: Content) -> some View {
         content
             // 缩放
             .if(config.isResizable, transform: { view in
                 view.frame(width: width * pinchMagnification, height: height * pinchMagnification)
             })
-
-            .readSize(callback: {
-                viewSize = $0
+            .onGeometryChange(for: CGSize.self, of: { proxy in
+                proxy.size
+            }, action: { newValue in
+                viewSize = newValue
             })
             .padding(4)
             .border(isSelected ? .cyan : .clear, width: 2)
@@ -52,9 +42,20 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
                     .gesture(rotationDragGesture)
                     .opacity(isSelected ? 1 : 0)
             })
-            .if(isSelected && config.isResizable, transform: { view in
-                view.modifier(DraggableModifier(width: $width, height: $height, hasBorder: true, item: item, onResize: config.onResize))
-            })
+            .if(
+                isSelected && config.isResizable,
+                transform: { view in
+                    view.modifier(
+                        DraggableModifier(
+                            width: $width,
+                            height: $height,
+                            hasBorder: true,
+                            item: item,
+                            onResize: config.onResize
+                        )
+                    )
+                }
+            )
             .overlay(alignment: .topLeading, content: {
                 Button(action: {
                     config.onDelete(item)
@@ -87,14 +88,29 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .coordinateSpace(name: id)
             .position(position)
             .offset(offset)
-            .gesture(dragGesture)
+            .gesture(moveGesture)
             .gesture(
                 rotationGesture
                     .simultaneously(with: magnificationGesture)
             )
     }
 
-    private var dragGesture: some Gesture {
+    // MARK: Private
+
+    @State private var viewSize: CGSize = .zero
+
+    // 旋转
+    @State private var twistAngle: Angle = .zero
+
+    // 缩放
+    @State private var pinchMagnification: CGFloat = 1
+
+    // 位置
+    @State private var offset: CGSize = .zero
+
+    private let id = UUID()
+
+    private var moveGesture: some Gesture {
         DragGesture()
             .onChanged { value in
                 offset = value.translation
@@ -143,7 +159,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             }
     }
 
-    public func calculateRotation(value: DragGesture.Value) -> Angle {
+    private func calculateRotation(value: DragGesture.Value) -> Angle {
         let centerX = viewSize.width / 2
         let centerY = viewSize.height / 2
         let startVector = CGVector(dx: value.startLocation.x - centerX, dy: value.startLocation.y - centerY)

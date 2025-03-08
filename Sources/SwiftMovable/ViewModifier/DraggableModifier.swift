@@ -9,9 +9,13 @@ import Foundation
 
 import SwiftUI
 
+// MARK: - NodePosition
+
 enum NodePosition {
     case topLeft, topRight, bottomLeft, bottomRight
 }
+
+// MARK: - DraggableNode
 
 struct DraggableNode<Item: MovableObject>: View {
     @Binding var width: CGFloat
@@ -57,14 +61,10 @@ struct DraggableNode<Item: MovableObject>: View {
     }
 }
 
+// MARK: - DraggableModifier
+
 struct DraggableModifier<Item: MovableObject>: ViewModifier {
-    @Binding var width: CGFloat
-    @Binding var height: CGFloat
-    // 宽高比
-    let aspectRatio: CGFloat
-//    let hasBorder: Bool
-    let onResize: (Item, CGSize) -> CGSize
-    var item: Item
+    // MARK: Lifecycle
 
     init(width: Binding<CGFloat>, height: Binding<CGFloat>, hasBorder _: Bool, item: Item, onResize: @escaping (Item, CGSize) -> CGSize) {
         aspectRatio = width.wrappedValue / height.wrappedValue
@@ -74,10 +74,27 @@ struct DraggableModifier<Item: MovableObject>: ViewModifier {
         self.item = item
     }
 
+    // MARK: Internal
+
+    @Binding var width: CGFloat
+    @Binding var height: CGFloat
+    // 宽高比
+    let aspectRatio: CGFloat
+//    let hasBorder: Bool
+    let onResize: (Item, CGSize) -> CGSize
+    var item: Item
+
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .bottomTrailing) {
-                DraggableNode(width: $width, height: $height, nodeType: .bottomRight, aspectRatio: aspectRatio, item: item, resizeCallback: onResize)
+                DraggableNode(
+                    width: $width,
+                    height: $height,
+                    nodeType: .bottomRight,
+                    aspectRatio: aspectRatio,
+                    item: item,
+                    resizeCallback: onResize
+                )
             }
     }
 }
