@@ -53,7 +53,7 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     @Bindable var item: Item
     @Binding var selection: MovableObject?
     var config: MovableObjectViewConfig<Item>
-    var content: (Item) -> Content
+    @ViewBuilder var content: (Item) -> Content
 
     // MARK: Private
 

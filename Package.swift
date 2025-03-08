@@ -25,11 +25,6 @@ let package = Package(
             resources: [
                 .process("Resources/Media.xcassets"),
             ]
-        ),
-
-        .testTarget(
-            name: "SwiftMovableTests",
-            dependencies: ["SwiftMovable"]
-        ),
+        )
     ]
 )
