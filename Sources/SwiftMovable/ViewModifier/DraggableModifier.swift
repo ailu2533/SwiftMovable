@@ -29,7 +29,7 @@ struct DraggableNode<Item: MovableObject>: View {
     var body: some View {
         Image(systemName: "arrow.up.left.and.arrow.down.right")
             .iconStyle()
-            .offset(x: Offset, y: Offset)
+            .offset(x: kOffset, y: kOffset)
             .gesture(
                 DragGesture()
                     .onChanged { value in

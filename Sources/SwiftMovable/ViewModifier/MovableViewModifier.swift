@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+let kOffset: CGFloat = 16
+
+// MARK: - MovableViewModifier
+
 struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     // MARK: Internal
 
@@ -62,7 +66,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
                 }, label: {
                     Image(systemName: "trash")
                         .iconStyle()
-                        .offset(x: -Offset, y: -Offset)
+                        .offset(x: -kOffset, y: -kOffset)
                         .opacity(isSelected ? 1 : 0)
                 })
                 .buttonStyle(PlainButtonStyle())
@@ -71,14 +75,14 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .overlay(alignment: .topTrailing, content: {
                 Image(systemName: "pencil.and.outline")
                     .iconStyle()
-                    .offset(x: Offset, y: -Offset)
+                    .offset(x: kOffset, y: -kOffset)
                     .opacity(isSelected ? 1 : 0)
             })
             // square.3.layers.3d.top.filled
             .overlay(alignment: .bottomLeading, content: {
                 Image(systemName: "square.3.layers.3d.top.filled")
                     .iconStyle()
-                    .offset(x: -Offset, y: Offset)
+                    .offset(x: -kOffset, y: kOffset)
                     .opacity(isSelected ? 1 : 0)
             })
 
@@ -126,7 +130,6 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .onChanged { value in
                 twistAngle = value
             }
-
             .onEnded { _ in
                 currentRotation += twistAngle
                 twistAngle = .zero
@@ -138,7 +141,6 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .onChanged { value in
                 pinchMagnification = value
             }
-
             .onEnded { _ in
                 width *= pinchMagnification
                 height *= pinchMagnification
@@ -148,11 +150,9 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
 
     private var rotationDragGesture: some Gesture {
         DragGesture(coordinateSpace: .named(id))
-
             .onChanged { value in
                 twistAngle = calculateRotation(value: value)
             }
-
             .onEnded { _ in
                 currentRotation += twistAngle
                 twistAngle = .zero

@@ -66,9 +66,3 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
         )
     }
 }
-
-// MARK: - MovableImage
-
-public class MovableImage: MovableObject {
-    public var imageName: String = "plus"
-}
