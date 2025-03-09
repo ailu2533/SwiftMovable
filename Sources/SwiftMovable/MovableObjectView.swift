@@ -30,7 +30,6 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
 
     public var body: some View {
         content(item)
-            .zIndex(item.zIndex)
             .modifier(MovableViewModifier(
                 currentRotation: currentRotationAngle,
                 position: $item.pos,
@@ -40,6 +39,7 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
                 config: config,
                 item: item
             ))
+            .zIndex(item.zIndex)
             .disabled(!selected)
             .onTapGesture {
                 selection = item

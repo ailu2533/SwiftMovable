@@ -18,7 +18,7 @@ struct IconViewModifier: ViewModifier {
             .font(.system(size: size))
             .fontWeight(.semibold)
             .foregroundColor(.secondary)
-            .frame(width: size * 2, height: size * 2)
+            .padding(8)
             .background(Color(.systemGray6))
             .clipShape(Circle())
             .shadow(radius: 1)
@@ -26,7 +26,7 @@ struct IconViewModifier: ViewModifier {
 }
 
 extension View {
-    func iconStyle(size: CGFloat = 12) -> some View {
+    func iconStyle(size: CGFloat = 14) -> some View {
         modifier(IconViewModifier(size: size))
     }
 }
