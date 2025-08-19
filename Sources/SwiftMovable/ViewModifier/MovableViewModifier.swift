@@ -37,7 +37,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
                 viewSize = newValue
             })
             .padding(4)
-            .border(isSelected ? .cyan : .clear, width: 2)
+            .border(isSelected ? .purple : .clear, width: 2)
             .contentShape(Rectangle())
             .overlay(alignment: .bottom, content: {
                 Image(systemName: "arrow.clockwise")

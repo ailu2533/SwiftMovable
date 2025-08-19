@@ -58,7 +58,6 @@ public struct MovableObjectView<Item: MovableObject, Content: View>: View {
     // MARK: Private
 
     private var selected: Bool { selection == item }
-    private var showControl: Bool { selected && config.isEnabled }
     private var currentRotationAngle: Binding<Angle> {
         Binding(
             get: { Angle(degrees: item.rotationDegree) },
