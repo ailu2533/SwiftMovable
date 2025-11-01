@@ -13,6 +13,10 @@ import SwiftUI
 
 enum NodePosition {
     case topLeft, topRight, bottomLeft, bottomRight
+    case top    // 上
+    case bottom // 下
+    case left   // 左
+    case right  // 右
 }
 
 // MARK: - DraggableNode
@@ -47,9 +51,16 @@ struct DraggableNode<Item: MovableObject>: View {
                             newHeight = height + value.translation.height
                             newWidth = newHeight * aspectRatio
                         case .bottomRight:
-
                             newWidth = width + value.translation.width
                             newHeight = newWidth / aspectRatio
+                        case .top:
+                            newHeight = height - value.translation.height
+                        case .bottom:
+                            newHeight = height + value.translation.height
+                        case .left:
+                            newWidth = width - value.translation.width
+                        case .right:
+                            newWidth = width + value.translation.width
                         }
 
                         let newSize = resizeCallback(item, .init(width: newWidth, height: newHeight))
