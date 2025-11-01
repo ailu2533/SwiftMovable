@@ -165,8 +165,8 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
 
     private func calculateRotation(value: DragGesture.Value) -> Angle {
         let center = position
-        let startVector = CGVector(dx: value.startLocation.x - center.x, dy: value.startLocation.y - center.y)
-        let endVector = CGVector(dx: value.location.x - center.x, dy: value.location.y - center.y)
+        let startVector = value.startLocation - center
+        let endVector = value.location - center
         let angleDifference = atan2(endVector.dy, endVector.dx) - atan2(startVector.dy, startVector.dx)
         return Angle(radians: angleDifference)
     }
