@@ -96,7 +96,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
                 offset = value.translation
             }
             .onEnded { _ in
-                position = .init(x: position.x + offset.width, y: position.y + offset.height)
+                position = position + offset
                 offset = .zero
             }
     }
