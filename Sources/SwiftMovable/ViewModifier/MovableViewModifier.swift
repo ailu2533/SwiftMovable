@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+extension EnvironmentValues {
+    @Entry public var canvasCoordinateSpace: String = "default"
+}
+
 let kOffset: CGFloat = 16
 
 // MARK: - MovableViewModifier
@@ -24,6 +28,9 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     var isSelected = false
     var config: MovableObjectViewConfig<Item>
     var item: Item
+
+    @Environment(\.canvasCoordinateSpace)
+    private var coordinateSpace
 
     func body(content: Content) -> some View {
         content
@@ -89,7 +96,6 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
 //             旋转
             .rotationEffect(currentRotation + twistAngle)
 //             移动
-            .coordinateSpace(name: id)
             .position(position)
             .offset(offset)
             .gesture(moveGesture)
@@ -112,10 +118,8 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     // 位置
     @State private var offset: CGSize = .zero
 
-    private let id = UUID()
-
     private var moveGesture: some Gesture {
-        DragGesture()
+        DragGesture(coordinateSpace: .named(coordinateSpace))
             .onChanged { value in
                 offset = value.translation
             }
@@ -149,7 +153,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     }
 
     private var rotationDragGesture: some Gesture {
-        DragGesture(coordinateSpace: .global)
+        DragGesture(coordinateSpace: .named(coordinateSpace))
             .onChanged { value in
                 twistAngle = calculateRotation(value: value)
             }
@@ -160,7 +164,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     }
 
     private func calculateRotation(value: DragGesture.Value) -> Angle {
-        let center = CGPoint(x: position.x + offset.width, y: position.y + offset.height)
+        let center = position
         let startVector = CGVector(dx: value.startLocation.x - center.x, dy: value.startLocation.y - center.y)
         let endVector = CGVector(dx: value.location.x - center.x, dy: value.location.y - center.y)
         let angleDifference = atan2(endVector.dy, endVector.dx) - atan2(startVector.dy, startVector.dx)
