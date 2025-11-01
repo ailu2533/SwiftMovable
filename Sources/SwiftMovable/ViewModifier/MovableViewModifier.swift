@@ -35,9 +35,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     func body(content: Content) -> some View {
         content
             // 缩放
-            .if(config.isResizable, transform: { view in
-                view.frame(width: width * pinchMagnification, height: height * pinchMagnification)
-            })
+            .frame(width: width * pinchMagnification, height: height * pinchMagnification)
             .padding(4)
             .border(isSelected ? .purple : .clear, width: 2)
             .contentShape(Rectangle())
