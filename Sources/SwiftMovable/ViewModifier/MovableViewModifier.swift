@@ -149,7 +149,7 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     }
 
     private var rotationDragGesture: some Gesture {
-        DragGesture(coordinateSpace: .named(id))
+        DragGesture(coordinateSpace: .global)
             .onChanged { value in
                 twistAngle = calculateRotation(value: value)
             }
@@ -160,10 +160,9 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     }
 
     private func calculateRotation(value: DragGesture.Value) -> Angle {
-        let centerX = viewSize.width / 2
-        let centerY = viewSize.height / 2
-        let startVector = CGVector(dx: value.startLocation.x - centerX, dy: value.startLocation.y - centerY)
-        let endVector = CGVector(dx: value.location.x - centerX, dy: value.location.y - centerY)
+        let center = CGPoint(x: position.x + offset.width, y: position.y + offset.height)
+        let startVector = CGVector(dx: value.startLocation.x - center.x, dy: value.startLocation.y - center.y)
+        let endVector = CGVector(dx: value.location.x - center.x, dy: value.location.y - center.y)
         let angleDifference = atan2(endVector.dy, endVector.dx) - atan2(startVector.dy, startVector.dx)
         return Angle(radians: angleDifference)
     }
