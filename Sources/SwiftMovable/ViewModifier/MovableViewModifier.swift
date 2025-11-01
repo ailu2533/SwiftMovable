@@ -38,61 +38,37 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
             .if(config.isResizable, transform: { view in
                 view.frame(width: width * pinchMagnification, height: height * pinchMagnification)
             })
-            .onGeometryChange(for: CGSize.self, of: { proxy in
-                proxy.size
-            }, action: { newValue in
-                viewSize = newValue
-            })
             .padding(4)
             .border(isSelected ? .purple : .clear, width: 2)
             .contentShape(Rectangle())
-            .overlay(alignment: .bottom, content: {
+            .overlay(alignment: .bottom) {
                 Image(systemName: "arrow.clockwise")
                     .iconStyle()
                     .offset(y: 44)
                     .gesture(rotationDragGesture)
                     .opacity(isSelected ? 1 : 0)
-            })
-            .if(
-                isSelected && config.isResizable,
-                transform: { view in
-                    view.modifier(
-                        DraggableModifier(
-                            width: $width,
-                            height: $height,
-                            hasBorder: true,
-                            item: item,
-                            onResize: config.onResize
-                        )
+            }
+            .if(isSelected && config.isResizable) { view in
+                view.modifier(
+                    DraggableModifier(
+                        width: $width,
+                        height: $height,
+                        hasBorder: true,
+                        item: item,
+                        onResize: config.onResize
                     )
-                }
-            )
-            .overlay(alignment: .topLeading, content: {
-                Button(action: {
+                )
+            }
+            .overlay(alignment: .topLeading) {
+                Button {
                     config.onDelete(item)
-                }, label: {
+                } label: {
                     Image(systemName: "trash")
                         .iconStyle()
-                        .offset(x: -kOffset, y: -kOffset)
-                        .opacity(isSelected ? 1 : 0)
-                })
-                .buttonStyle(PlainButtonStyle())
-
-            })
-//            .overlay(alignment: .topTrailing, content: {
-//                Image(systemName: "pencil.and.outline")
-//                    .iconStyle()
-//                    .offset(x: kOffset, y: -kOffset)
-//                    .opacity(isSelected ? 1 : 0)
-//            })
-//            // square.3.layers.3d.top.filled
-//            .overlay(alignment: .bottomLeading, content: {
-//                Image(systemName: "square.3.layers.3d.top.filled")
-//                    .iconStyle()
-//                    .offset(x: -kOffset, y: kOffset)
-//                    .opacity(isSelected ? 1 : 0)
-//            })
-
+                }
+                .offset(x: -kOffset, y: -kOffset)
+                .opacity(isSelected ? 1 : 0)
+            }
 //             旋转
             .rotationEffect(currentRotation + twistAngle)
 //             移动
@@ -106,8 +82,6 @@ struct MovableViewModifier<Item: MovableObject>: ViewModifier {
     }
 
     // MARK: Private
-
-    @State private var viewSize: CGSize = .zero
 
     // 旋转
     @State private var twistAngle: Angle = .zero
