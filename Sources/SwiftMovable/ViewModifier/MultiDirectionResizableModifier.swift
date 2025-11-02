@@ -39,7 +39,9 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                             item: item,
                             onEdgeDrag: onEdgeDrag
                         )
-                        .frame(maxWidth: edgeType.maxWidth, maxHeight: edgeType.maxHeight, alignment: edgeType.alignment)
+                        .frame(maxWidth: edgeType.maxWidth,
+                               maxHeight: edgeType.maxHeight,
+                               alignment: edgeType.alignment)
                     }
                 }
             }
