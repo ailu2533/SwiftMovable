@@ -11,7 +11,6 @@ import SwiftUI
 // MARK: - EdgeResizeGesture
 
 private let dragAreaSize: CGFloat = 10
-private let borderHalfWidth: CGFloat = 12
 // private let dragOffset = dragAreaSize / 2 - borderHalfWidth
 private let dragOffset = dragAreaSize / 2 - 1
 
@@ -72,9 +71,28 @@ struct EdgeDragArea<Item: MovableObject>: View {
         }
     }
 
+    // MARK: - Body
+
+    var body: some View {
+        Capsule()
+            .fill(Color(.lightPink))
+            .contentShape(Rectangle())
+            .frame(maxWidth: maxWidth, maxHeight: maxHeight)
+            .offset(x: edgeType.offsetX, y: edgeType.offsetY)
+            .modifier(
+                EdgeResizeGesture(
+                    edgeType: edgeType,
+                    item: item,
+                    onEdgeDrag: onEdgeDrag
+                )
+            )
+    }
+}
+
+private extension EdgeType {
     /// 根据边缘类型计算 X 轴偏移
-    private var offsetX: CGFloat {
-        switch edgeType {
+    var offsetX: CGFloat {
+        switch self {
         case .top, .bottom:
             0
         case .left:
@@ -85,8 +103,8 @@ struct EdgeDragArea<Item: MovableObject>: View {
     }
 
     /// 根据边缘类型计算 Y 轴偏移
-    private var offsetY: CGFloat {
-        switch edgeType {
+    var offsetY: CGFloat {
+        switch self {
         case .top:
             -dragOffset
         case .bottom:
@@ -94,22 +112,5 @@ struct EdgeDragArea<Item: MovableObject>: View {
         case .left, .right:
             0
         }
-    }
-
-    // MARK: - Body
-
-    var body: some View {
-        Capsule()
-            .fill(Color(.lightPink))
-            .contentShape(Rectangle())
-            .frame(maxWidth: maxWidth, maxHeight: maxHeight)
-            .offset(x: offsetX, y: offsetY)
-            .modifier(
-                EdgeResizeGesture(
-                    edgeType: edgeType,
-                    item: item,
-                    onEdgeDrag: onEdgeDrag
-                )
-            )
     }
 }
