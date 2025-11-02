@@ -9,7 +9,6 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
     // MARK: Lifecycle
 
     public init(
-        hasBorder _: Bool,
         item: Item,
         onResize: @escaping (Item, CGSize) -> CGSize,
         showDragIndicators: Bool = false,
@@ -23,8 +22,6 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
 
     // MARK: Internal
 
-    @State private var pinchMagnification: CGFloat = 1
-
     let onResize: (Item, CGSize) -> CGSize
     var item: Item
     var isSelected: Bool
@@ -32,38 +29,43 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
 
     public func body(content: Content) -> some View {
         content
-            .frame(width: item.width * pinchMagnification, height: item.height * pinchMagnification)
-            .overlay(alignment: .top) {
+            .frame(width: item.width, height: item.height)
+            .overlay {
+                Color.clear
+                    .border(Color(.lightPink), width: 2)
+                    .opacity(isSelected ? 1 : 0)
+
                 EdgeDragArea(
                     edgeType: .top,
                     item: item,
                     onEdgeDrag: onEdgeDrag,
-                    showVisualIndicator: isSelected
                 )
-            }
-            .overlay(alignment: .leading) {
+                .frame(maxHeight: .infinity, alignment: .top)
+                .opacity(isSelected ? 1 : 0)
+
                 EdgeDragArea(
                     edgeType: .left,
                     item: item,
                     onEdgeDrag: onEdgeDrag,
-                    showVisualIndicator: isSelected
                 )
-            }
-            .overlay(alignment: .trailing) {
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .opacity(isSelected ? 1 : 0)
+
                 EdgeDragArea(
                     edgeType: .right,
                     item: item,
                     onEdgeDrag: onEdgeDrag,
-                    showVisualIndicator: isSelected
                 )
-            }
-            .overlay(alignment: .bottom) {
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .opacity(isSelected ? 1 : 0)
+
                 EdgeDragArea(
                     edgeType: .bottom,
                     item: item,
                     onEdgeDrag: onEdgeDrag,
-                    showVisualIndicator: isSelected
                 )
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .opacity(isSelected ? 1 : 0)
             }
     }
 }

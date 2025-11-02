@@ -32,7 +32,6 @@ struct EdgeDragArea<Item: MovableObject>: View {
     let edgeType: EdgeType
     var item: Item
     var onEdgeDrag: EdgeDragCallback<Item>? = nil
-    var showVisualIndicator: Bool = false
 
     // MARK: - Computed Properties
 
@@ -84,7 +83,7 @@ struct EdgeDragArea<Item: MovableObject>: View {
 
     var body: some View {
         Capsule()
-            .fill(showVisualIndicator ? Color(.lightPink) : Color.clear)
+            .fill(Color(.lightPink))
             .contentShape(Rectangle())
             .frame(maxWidth: maxWidth, maxHeight: maxHeight)
             .offset(x: offsetX, y: offsetY)
