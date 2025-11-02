@@ -28,27 +28,27 @@ protocol MovableObjectProtocol: Identifiable {
     // static func == (lhs: Self, rhs: Self) -> Bool
     // PERIPHERY: Unused function.method.instance 'hash(into:)'
     // func hash(into hasher: inout Hasher)
-// }
+    // }
 
-// extension MovableObjectProtocol where Self: Hashable {
+    // extension MovableObjectProtocol where Self: Hashable {
     // PERIPHERY: Unused function.operator.infix '==(_:_:)'
     // static func == (lhs: Self, rhs: Self) -> Bool {
-        // lhs.id == rhs.id
-            // && lhs.pos == rhs.pos
-            // && lhs.rotationDegree == rhs.rotationDegree
-            // && lhs.zIndex == rhs.zIndex
-            // && lhs.width == rhs.width
-            // && lhs.height == rhs.height
+    // lhs.id == rhs.id
+    // && lhs.pos == rhs.pos
+    // && lhs.rotationDegree == rhs.rotationDegree
+    // && lhs.zIndex == rhs.zIndex
+    // && lhs.width == rhs.width
+    // && lhs.height == rhs.height
     // }
 
     // PERIPHERY: Unused function.method.instance 'hash(into:)'
     // func hash(into hasher: inout Hasher) {
-        // hasher.combine(id)
-        // hasher.combine(pos.x)
-        // hasher.combine(pos.y)
-        // hasher.combine(rotationDegree)
-        // hasher.combine(zIndex)
-        // hasher.combine(width)
-        // hasher.combine(height)
+    // hasher.combine(id)
+    // hasher.combine(pos.x)
+    // hasher.combine(pos.y)
+    // hasher.combine(rotationDegree)
+    // hasher.combine(zIndex)
+    // hasher.combine(width)
+    // hasher.combine(height)
     // }
 }

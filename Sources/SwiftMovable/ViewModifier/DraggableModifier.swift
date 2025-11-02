@@ -13,10 +13,10 @@ import SwiftUI
 
 enum NodePosition {
     case topLeft, topRight, bottomLeft, bottomRight
-    case top    // 上
+    case top // 上
     case bottom // 下
-    case left   // 左
-    case right  // 右
+    case left // 左
+    case right // 右
 }
 
 // MARK: - DraggableNode

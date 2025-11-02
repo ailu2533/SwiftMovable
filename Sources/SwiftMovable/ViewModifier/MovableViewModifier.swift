@@ -1,5 +1,5 @@
 //
-//  RotationViewModifier.swift
+//  MovableViewModifier.swift
 //
 //
 //  Created by ailu on 2024/7/13.
@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-extension EnvironmentValues {
-    @Entry public var canvasCoordinateSpace: String = "default"
+public extension EnvironmentValues {
+    @Entry var canvasCoordinateSpace: String = "default"
 }
 
 let kOffset: CGFloat = 16

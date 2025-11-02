@@ -37,7 +37,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                         EdgeDragArea(
                             edgeType: edgeType,
                             item: item,
-                            onEdgeDrag: onEdgeDrag,
+                            onEdgeDrag: onEdgeDrag
                         )
                         .frame(maxWidth: edgeType.maxWidth, maxHeight: edgeType.maxHeight, alignment: edgeType.alignment)
                     }
@@ -48,7 +48,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
     }
 }
 
-extension EdgeType {
+private extension EdgeType {
     var maxHeight: CGFloat? {
         switch self {
         case .top:

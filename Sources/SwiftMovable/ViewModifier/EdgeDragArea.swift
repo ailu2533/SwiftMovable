@@ -48,7 +48,7 @@ public typealias EdgeDragCallback<Item: MovableObject> = (Item, EdgeType, CGSize
 struct EdgeDragArea<Item: MovableObject>: View {
     let edgeType: EdgeType
     var item: Item
-    var onEdgeDrag: EdgeDragCallback<Item>? = nil
+    var onEdgeDrag: EdgeDragCallback<Item>?
 
     // MARK: - Computed Properties
 
@@ -56,9 +56,9 @@ struct EdgeDragArea<Item: MovableObject>: View {
     private var maxWidth: CGFloat {
         switch edgeType {
         case .top, .bottom:
-            return min(item.width * 0.5, 100)
+            min(item.width * 0.5, 100)
         case .left, .right:
-            return dragAreaSize
+            dragAreaSize
         }
     }
 
@@ -66,9 +66,9 @@ struct EdgeDragArea<Item: MovableObject>: View {
     private var maxHeight: CGFloat {
         switch edgeType {
         case .top, .bottom:
-            return dragAreaSize
+            dragAreaSize
         case .left, .right:
-            return min(item.height * 0.5, 100)
+            min(item.height * 0.5, 100)
         }
     }
 
@@ -76,11 +76,11 @@ struct EdgeDragArea<Item: MovableObject>: View {
     private var offsetX: CGFloat {
         switch edgeType {
         case .top, .bottom:
-            return 0
+            0
         case .left:
-            return -dragOffset
+            -dragOffset
         case .right:
-            return dragOffset
+            dragOffset
         }
     }
 
@@ -88,11 +88,11 @@ struct EdgeDragArea<Item: MovableObject>: View {
     private var offsetY: CGFloat {
         switch edgeType {
         case .top:
-            return -dragOffset
+            -dragOffset
         case .bottom:
-            return dragOffset
+            dragOffset
         case .left, .right:
-            return 0
+            0
         }
     }
 
