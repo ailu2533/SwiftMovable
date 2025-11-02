@@ -10,11 +10,9 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
 
     public init(
         item: Item,
-        onResize: @escaping (Item, CGSize) -> CGSize,
         showDragIndicators: Bool = false,
         onEdgeDrag: EdgeDragCallback<Item>? = nil
     ) {
-        self.onResize = onResize
         self.item = item
         isSelected = showDragIndicators
         self.onEdgeDrag = onEdgeDrag
@@ -22,9 +20,8 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
 
     // MARK: Internal
 
-    let onResize: (Item, CGSize) -> CGSize
     var item: Item
-    var isSelected: Bool
+    let isSelected: Bool
     var onEdgeDrag: EdgeDragCallback<Item>?
 
     public func body(content: Content) -> some View {
@@ -67,5 +64,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                 .frame(maxHeight: .infinity, alignment: .bottom)
                 .opacity(isSelected ? 1 : 0)
             }
+            .position(item.pos)
+            .zIndex(item.zIndex)
     }
 }
