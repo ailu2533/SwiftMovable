@@ -30,6 +30,19 @@ public enum EdgeType: Int, CaseIterable, Identifiable {
         }
     }
 
+    public var oppositeEdge: Self {
+        switch self {
+        case .top:
+            .bottom
+        case .bottom:
+            .top
+        case .left:
+            .right
+        case .right:
+            .left
+        }
+    }
+
     public var id: Int {
         rawValue
     }
