@@ -9,73 +9,67 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
     // MARK: Lifecycle
 
     public init(
-        width: Binding<CGFloat>,
-        height: Binding<CGFloat>,
         hasBorder _: Bool,
         item: Item,
         onResize: @escaping (Item, CGSize) -> CGSize,
-        showDragIndicators: Bool = false
+        showDragIndicators: Bool = false,
+        onEdgeDrag: EdgeDragCallback<Item>? = nil
     ) {
-        aspectRatio = width.wrappedValue / height.wrappedValue
-        _width = width
-        _height = height
         self.onResize = onResize
         self.item = item
-        self.isSelected = showDragIndicators
+        isSelected = showDragIndicators
+        self.onEdgeDrag = onEdgeDrag
     }
 
     // MARK: Internal
 
     @State private var pinchMagnification: CGFloat = 1
 
-    @Binding var width: CGFloat
-    @Binding var height: CGFloat
-    // 宽高比
-    let aspectRatio: CGFloat
     let onResize: (Item, CGSize) -> CGSize
     var item: Item
     var isSelected: Bool
+    var onEdgeDrag: EdgeDragCallback<Item>?
 
     public func body(content: Content) -> some View {
         content
-            .frame(width: width * pinchMagnification, height: height * pinchMagnification)
+            .frame(width: item.width * pinchMagnification, height: item.height * pinchMagnification)
             // Top edge
             .overlay(alignment: .top) {
-                TopEdgeDragArea(
-                    width: $width,
-                    height: $height,
+                EdgeDragArea(
+                    edgeType: .top,
                     item: item,
                     resizeCallback: onResize,
+                    onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
             // Left edge
             .overlay(alignment: .leading) {
-                LeftEdgeDragArea(
-                    width: $width,
-                    height: $height,
+                EdgeDragArea(
+                    edgeType: .left,
                     item: item,
                     resizeCallback: onResize,
+                    onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
             // Right edge
             .overlay(alignment: .trailing) {
-                RightEdgeDragArea(
-                    width: $width,
-                    height: $height,
+                EdgeDragArea(
+                    edgeType: .right,
                     item: item,
                     resizeCallback: onResize,
+                    onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
             // Bottom edge
             .overlay(alignment: .bottom) {
-                BottomEdgeDragArea(
-                    width: $width,
-                    height: $height,
+                EdgeDragArea(
+                    edgeType: .bottom,
                     item: item,
                     resizeCallback: onResize,
+                    onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
