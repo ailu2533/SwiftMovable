@@ -15,8 +15,25 @@ private let borderHalfWidth: CGFloat = 12
 // private let dragOffset = dragAreaSize / 2 - borderHalfWidth
 private let dragOffset = dragAreaSize / 2 - 1
 
-public enum EdgeType {
+public enum EdgeType: Int, CaseIterable, Identifiable {
     case top, bottom, left, right
+
+    var alignment: Alignment {
+        switch self {
+        case .top:
+            .top
+        case .bottom:
+            .bottom
+        case .left:
+            .leading
+        case .right:
+            .trailing
+        }
+    }
+
+    public var id: Int {
+        rawValue
+    }
 }
 
 /// 边缘拖拽回调类型

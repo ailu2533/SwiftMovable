@@ -28,43 +28,50 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
         content
             .frame(width: item.width, height: item.height)
             .overlay {
-                Color.clear
-                    .border(Color(.lightPink), width: 2)
-                    .opacity(isSelected ? 1 : 0)
+                if isSelected {
+                    Color.clear
+                        .border(Color(.lightPink), width: 2)
+                        .opacity(isSelected ? 1 : 0)
 
-                EdgeDragArea(
-                    edgeType: .top,
-                    item: item,
-                    onEdgeDrag: onEdgeDrag,
-                )
-                .frame(maxHeight: .infinity, alignment: .top)
-                .opacity(isSelected ? 1 : 0)
-
-                EdgeDragArea(
-                    edgeType: .left,
-                    item: item,
-                    onEdgeDrag: onEdgeDrag,
-                )
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .opacity(isSelected ? 1 : 0)
-
-                EdgeDragArea(
-                    edgeType: .right,
-                    item: item,
-                    onEdgeDrag: onEdgeDrag,
-                )
-                .frame(maxWidth: .infinity, alignment: .trailing)
-                .opacity(isSelected ? 1 : 0)
-
-                EdgeDragArea(
-                    edgeType: .bottom,
-                    item: item,
-                    onEdgeDrag: onEdgeDrag,
-                )
-                .frame(maxHeight: .infinity, alignment: .bottom)
-                .opacity(isSelected ? 1 : 0)
+                    ForEach(EdgeType.allCases) { edgeType in
+                        EdgeDragArea(
+                            edgeType: edgeType,
+                            item: item,
+                            onEdgeDrag: onEdgeDrag,
+                        )
+                        .frame(maxWidth: edgeType.maxWidth, maxHeight: edgeType.maxHeight, alignment: edgeType.alignment)
+                    }
+                }
             }
             .position(item.pos)
             .zIndex(item.zIndex)
+    }
+}
+
+extension EdgeType {
+    var maxHeight: CGFloat? {
+        switch self {
+        case .top:
+            .infinity
+        case .bottom:
+            .infinity
+        case .left:
+            nil
+        case .right:
+            nil
+        }
+    }
+
+    var maxWidth: CGFloat? {
+        switch self {
+        case .top:
+            nil
+        case .bottom:
+            nil
+        case .left:
+            .infinity
+        case .right:
+            .infinity
+        }
     }
 }
