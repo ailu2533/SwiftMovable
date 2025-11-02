@@ -24,18 +24,13 @@ public enum EdgeType {
 /// - item: 被拖拽的对象
 /// - edgeType: 被拖拽的边缘类型
 /// - translation: 拖拽的平移量
-/// - oldSize: 调整前的尺寸
-/// - newSize: 调整后的尺寸
-public typealias EdgeDragCallback<Item: MovableObject> = (Item, EdgeType, CGSize, CGSize, CGSize) -> Void
-
-// MARK: - Unified Edge Drag Area
+public typealias EdgeDragCallback<Item: MovableObject> = (Item, EdgeType, CGSize) -> Void
 
 /// 统一的边缘拖拽区域视图
 /// 通过 edgeType 参数区分四种边缘类型
 struct EdgeDragArea<Item: MovableObject>: View {
     let edgeType: EdgeType
     var item: Item
-    var resizeCallback: (Item, CGSize) -> CGSize = { _, x in x }
     var onEdgeDrag: EdgeDragCallback<Item>? = nil
     var showVisualIndicator: Bool = false
 
@@ -97,7 +92,6 @@ struct EdgeDragArea<Item: MovableObject>: View {
                 EdgeResizeGesture(
                     edgeType: edgeType,
                     item: item,
-                    resizeCallback: resizeCallback,
                     onEdgeDrag: onEdgeDrag
                 )
             )

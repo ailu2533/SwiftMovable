@@ -68,3 +68,9 @@ open class MovableObject: MovableObjectProtocol, Equatable {
         offset = .zero
     }
 }
+
+public extension MovableObject {
+    var size: CGSize {
+        CGSize(width: width, height: height)
+    }
+}

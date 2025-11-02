@@ -33,42 +33,34 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
     public func body(content: Content) -> some View {
         content
             .frame(width: item.width * pinchMagnification, height: item.height * pinchMagnification)
-            // Top edge
             .overlay(alignment: .top) {
                 EdgeDragArea(
                     edgeType: .top,
                     item: item,
-                    resizeCallback: onResize,
                     onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
-            // Left edge
             .overlay(alignment: .leading) {
                 EdgeDragArea(
                     edgeType: .left,
                     item: item,
-                    resizeCallback: onResize,
                     onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
-            // Right edge
             .overlay(alignment: .trailing) {
                 EdgeDragArea(
                     edgeType: .right,
                     item: item,
-                    resizeCallback: onResize,
                     onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )
             }
-            // Bottom edge
             .overlay(alignment: .bottom) {
                 EdgeDragArea(
                     edgeType: .bottom,
                     item: item,
-                    resizeCallback: onResize,
                     onEdgeDrag: onEdgeDrag,
                     showVisualIndicator: isSelected
                 )

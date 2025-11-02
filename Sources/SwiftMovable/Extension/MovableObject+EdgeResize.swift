@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-@available(macOS 14.0, *)
 extension MovableObject {
     /// 移动指定边缘并调整对象的尺寸和位置
     ///
@@ -24,8 +23,7 @@ extension MovableObject {
     ///   - constrainedBy: 可选的尺寸约束回调，用于限制最终尺寸
     public func moveEdge(
         _ edgeType: EdgeType,
-        by translation: CGSize,
-        constrainedBy callback: ((MovableObject, CGSize) -> CGSize)? = nil
+        by translation: CGSize
     ) {
         // 保存原始尺寸
         let oldWidth = width
@@ -47,12 +45,7 @@ extension MovableObject {
         }
         
         // 应用尺寸约束回调（如果提供）
-        let constrainedSize: CGSize
-        if let callback = callback {
-            constrainedSize = callback(self, CGSize(width: newWidth, height: newHeight))
-        } else {
-            constrainedSize = CGSize(width: newWidth, height: newHeight)
-        }
+        let constrainedSize = CGSize(width: newWidth, height: newHeight)
         
         // 计算尺寸变化
         let deltaWidth = constrainedSize.width - oldWidth
