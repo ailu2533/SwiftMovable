@@ -21,7 +21,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
         _height = height
         self.onResize = onResize
         self.item = item
-        self.showDragIndicators = showDragIndicators
+        self.isSelected = showDragIndicators
     }
 
     // MARK: Internal
@@ -34,7 +34,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
     let aspectRatio: CGFloat
     let onResize: (Item, CGSize) -> CGSize
     var item: Item
-    var showDragIndicators: Bool
+    var isSelected: Bool
 
     public func body(content: Content) -> some View {
         content
@@ -46,7 +46,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                     height: $height,
                     item: item,
                     resizeCallback: onResize,
-                    showVisualIndicator: showDragIndicators
+                    showVisualIndicator: isSelected
                 )
             }
             // Left edge
@@ -56,7 +56,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                     height: $height,
                     item: item,
                     resizeCallback: onResize,
-                    showVisualIndicator: showDragIndicators
+                    showVisualIndicator: isSelected
                 )
             }
             // Right edge
@@ -66,7 +66,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                     height: $height,
                     item: item,
                     resizeCallback: onResize,
-                    showVisualIndicator: showDragIndicators
+                    showVisualIndicator: isSelected
                 )
             }
             // Bottom edge
@@ -76,7 +76,7 @@ public struct MultiDirectionResizableModifier<Item: MovableObject>: ViewModifier
                     height: $height,
                     item: item,
                     resizeCallback: onResize,
-                    showVisualIndicator: showDragIndicators
+                    showVisualIndicator: isSelected
                 )
             }
     }
