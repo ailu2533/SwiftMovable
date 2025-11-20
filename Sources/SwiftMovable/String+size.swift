@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension String {
+public extension String {
     /// 计算文本渲染所需的尺寸
     ///
     /// 使用 NSString 的 boundingRect 方法计算文本在给定字体和字号下所需的空间。
