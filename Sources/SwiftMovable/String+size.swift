@@ -64,6 +64,7 @@ extension String {
     ///   - maxFontSize: 最大字体大小限制（默认 100）
     ///   - minFontSize: 最小字体大小限制（默认 8）
     ///   - tolerance: 二分查找的精度（默认 0.5）
+    ///   - allowsWrapping: 是否允许自动换行（默认 true）。如果为 false，只在显式换行符处换行
     /// - Returns: 能够适配给定空间的字体大小
     ///
     /// 使用示例：
@@ -74,7 +75,8 @@ extension String {
     ///     font: .systemFont(ofSize: 1),
     ///     availableSize: availableSize,
     ///     maxFontSize: 50,
-    ///     minFontSize: 12
+    ///     minFontSize: 12,
+    ///     allowsWrapping: false
     /// )
     /// print("Optimal font size: \(fontSize)")
     /// ```
@@ -82,8 +84,9 @@ extension String {
         font: UIFont? = nil,
         availableSize: CGSize,
         maxFontSize: CGFloat = 100,
-        minFontSize: CGFloat = 8,
-        tolerance: CGFloat = 0.5
+        minFontSize: CGFloat = 1,
+        tolerance: CGFloat = 0.1,
+        allowsWrapping: Bool = true
     ) -> CGFloat {
         // 边界检查
         guard !isEmpty else { return minFontSize }
@@ -94,11 +97,14 @@ extension String {
         var high = maxFontSize
         var bestFit = minFontSize
 
+        // 确定计算时使用的最大宽度
+        let calculationMaxWidth: CGFloat = allowsWrapping ? availableSize.width : .greatestFiniteMagnitude
+
         // 二分查找最佳字体大小
         while high - low > tolerance {
             let mid = (low + high) / 2
             let testFont = font?.withSize(mid) ?? .systemFont(ofSize: mid)
-            let textSize = calculateTextSize(font: testFont, fontSize: mid, maxWidth: availableSize.width)
+            let textSize = calculateTextSize(font: testFont, fontSize: mid, maxWidth: calculationMaxWidth)
 
             if textSize.width <= availableSize.width, textSize.height <= availableSize.height {
                 // 当前字号可以适配，尝试更大的字号
